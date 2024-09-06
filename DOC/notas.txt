@@ -1,0 +1,2 @@
+MEIGA
+Módulo Electrónico de Integración de Giróscopo y Acelerómetro

@@ -9,4 +9,7 @@ La sustitución de los botones se realiza mediante el pestañeo y el movimiento 
 El dispositivo se alimenta por USB o batería conectada al puerto USB-C de MEIGA. La conexión con el ordenador, teléfono o tableta la realiza por bluetooth. MEIGA se presenta como un dispositivo de entrada HID de tipo ratón, por lo que se reconoce automáticamente y se instala sin necesidad de aplicaciones. 
 
 El dispositivo se ancha a cualquier tipo de gafa, con cuidado de que el sensor de pestañeo se encuentre en la zona de movimiento de la mejilla. 
-**
+
+[Proyecto MEIGA](https://sites.google.com/view/hauria/meiga)
+
+

@@ -1,24 +1,4 @@
-﻿**  
-
-**M** 
-
-ódulo  
-
-**E** 
-
-spacial de  
-
-**I** 
-
-ntegración de  
-
-**G** 
-
-iróscopo y  
-
-**A** 
-
-celerómetro 
+* MEIGA
 
 MEIGA es un sistema sustitutorio del ratón para personas con tetraplejia u otra dolencia que impida el movimiento de los brazos o 
 

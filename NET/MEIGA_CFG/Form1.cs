@@ -49,6 +49,7 @@ namespace MEIGA_CFG
             // Create a new SerialPort object with default settings.
             PuertoSerie = new SerialPort();
             cbCfgModo.SelectedIndex = 0;
+            this.Text = "MEIGA Config. Módulo Espacial de Integración de Giróscopo y Acelerómetro (v"+ Application.ProductVersion+")";
         }
 
         private void btConectar_Click(object sender, EventArgs e)

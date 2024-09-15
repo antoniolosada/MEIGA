@@ -1,6 +1,7 @@
 //*******************************************  FUNCIONES  *****************************************
+#define ESPERA_CFG  3000
 
-
+#ifndef EXTERN_FILE
 struct PosAccion
 {
   int Codigo;
@@ -11,6 +12,7 @@ struct PosAccion
   int TiempoMaxSeg;
   long MsActivacion;
 };
+#endif
 
 int  recta (int p1x, int p1y, int p2x, int p2y, int ms, int dir);
 void Circunferencia(int cx, int cy, int r, int ms, float ang_ini, float ang_fin, int dir);
@@ -36,5 +38,6 @@ int  ControlAcciones();
 void DesactivarMeiga();
 void ActivarMeiga();
 void ControlRaton();
+void LeerConfiguracion();
 void setup(void); 
 void loop(void);

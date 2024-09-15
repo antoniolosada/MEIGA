@@ -3,6 +3,8 @@
 #include <Kalman.h>
 #include <BleMouse.h>
 #include <Meiga.h>
+#include <Comandos.h>
+#include <EEPROM.h>
 
 #define PI                3.1415
 #define ESPERA_ACTIVACION 2000
@@ -10,7 +12,8 @@
 #define V_ALABEO          0
 #define V_MEJILLA         1
 
-#define DIRECCION         -1
+#define MODO_ACEL_GIRO    0 //Utiliza el acelerómetro para el cabeceo y el giróscopo para guiñada
+#define MODOD_ACEL        1 //Utiliza el acelerómetro para el cabeceo y para la guiñada
 
 #define A_DESACTIVAR      0
 #define A_ACTIVAR         1
@@ -20,25 +23,6 @@
 #define C_RATON           0
 #define MAX_CONTADORES_MS 10
 
-#define PULSACION_CORTA_MS  300      
-#define PULSACION_MEDIA_MS  1000
-#define PULSACION_LARGA_MS  5000      
-#define PULSACION_ADC       350
-
-#define MULTIPLO_DELTA_X    3
-#define MULTIPLO_DELTA_Y    4
-
-#define ALABEO_SCROLL_MIN   1.2
-#define ALABEO_SCROLL_MAX   2.5
-
-#define ALABEO_SCROLL_MIN_NEG -2.5
-#define ALABEO_SCROLL_MAX_NEG -1.5 
-
-#define ALABEO_SCROLL_MIN_POS 1 
-#define ALABEO_SCROLL_MAX_POS 2.5
-
-#define CORRECION_ALABEO_DER  1.2
-#define TIEMPO_MIN_SCROLL   200
 #define TIEMPO_RESET        400
 
 #define TIEMPO_SCROLL       150
@@ -48,7 +32,32 @@
 #define MAX_X               100
 #define MAX_Y               100
 
+#define EEPROM_SIZE         300
 
+//Cfg *******************************************
+int  PULSACION_CORTA_MS =       300;      
+int PULSACION_MEDIA_MS =        1000;
+int PULSACION_LARGA_MS =        5000;      
+int PULSACION_ADC =             350;
+int MULTIPLO_DELTA_X =          4;
+int MULTIPLO_DELTA_Y =          5;
+float ALABEO_SCROLL_MIN_NEG =   -2.5;
+float ALABEO_SCROLL_MAX_NEG =   -1.0; 
+float ALABEO_SCROLL_MIN_POS =   1; 
+float ALABEO_SCROLL_MAX_POS =   2.5;
+float CORRECION_ALABEO_DER =      1.2;
+int TIEMPO_MIN_SCROLL =         200;
+int CFG_MODO =                  0;
+int  DIRECCION =                1;
+int  PULSACION =                1;
+int  SCROLL =                   1;
+int  MOVIMIENTO =               1;
+int  CLIC_MEDIO =               1;
+int  CLIC_DER =                 1;
+int  CLIC_IZQ =                 1;
+int  ACCIONES =                 1;
+
+//***********************************************
 
 BleMouse bleMouse;
 
@@ -123,12 +132,17 @@ long MsIni = 0;
 bool calibracion = false;
 
 bool MeigaActivo = false;
-
+int iPosCad = 0;
 
 //*******************************************  SETUP  *****************************************
 void setup(void) 
 {
+  int CodIni =0;
   DEBUG = 1;
+  EEPROM.begin(EEPROM_SIZE);
+
+  CodIni = EEPROM.read(0);
+  if (CodIni == (int)COD_INI) LeerConfiguracion();
 
   DefinirAcciones();
   Serial.begin(115200);
@@ -165,6 +179,12 @@ void setup(void)
 //************************************************  LOOP  ***************************************************************
 void loop() 
 {
+  if (LeerCadena(&iPosCad, Cadena) == LECTURA_FIN)
+  {
+    ProcesarCadena(Cadena);
+    Cadena[0] = 0;
+  }
+
   mpu_temp->getEvent(&temp);
   mpu_accel->getEvent(&accel);
   mpu_gyro->getEvent(&gyro);
@@ -199,16 +219,18 @@ void loop()
 
   delay(1);
 
-  ActivarAccion = ControlAcciones();
-
-  switch(ActivarAccion)
+  if (ACCIONES == 1)
   {
-    case A_DESACTIVAR:
-    case A_ACTIVAR:
-        ActivarMeiga();
-        break;
-  }
+    ActivarAccion = ControlAcciones();
 
+    switch(ActivarAccion)
+    {
+      case A_DESACTIVAR:
+      case A_ACTIVAR:
+          ActivarMeiga();
+          break;
+    }
+  }
   if (MeigaActivo)
   {
     if (FinContador(C_RATON)) ControlRaton();
@@ -240,7 +262,7 @@ void ControlRaton()
 
   if(bleMouse.isConnected()) 
   {
-    bleMouse.move(MovX*DIRECCION,-MovY);
+    MoverRaton(MovX*DIRECCION, -MovY);
 
     if (AlabeoActivo())
     {
@@ -251,9 +273,9 @@ void ControlRaton()
           if (millis() - TiempoScroll > TIEMPO_SCROLL)
           {
             if (filtroAlabeo > 0)
-              bleMouse.move(0,0,1);
+              ScrollRaton(1);
             else
-              bleMouse.move(0,0,-1);
+              ScrollRaton(-1);
             TiempoScroll = millis();  
           } else if (TiempoScroll == 0) TiempoScroll = millis();  
         }
@@ -274,7 +296,7 @@ void ControlRaton()
         MsPulsacion = millis();
       else if (Tiempo > PULSACION_LARGA_MS)
       {
-        bleMouse.press(MOUSE_LEFT);
+        PulsarRaton(MOUSE_LEFT);
         BotonDerPulsado = true;
       }
     }
@@ -282,19 +304,19 @@ void ControlRaton()
     {
       if (BotonDerPulsado)
       {
-        bleMouse.release(MOUSE_LEFT);
+        LiberarRaton(MOUSE_LEFT);
         BotonDerPulsado = false;
       }
       else if (MsPulsacion)
       {
         if (Tiempo < PULSACION_CORTA_MS) {
-          bleMouse.click(MOUSE_LEFT);
+          ClicRaton(MOUSE_LEFT);
         }
         else if (Tiempo < PULSACION_MEDIA_MS){
-          bleMouse.click(MOUSE_MIDDLE);
+          ClicRaton(MOUSE_MIDDLE);
         }
         else {
-          bleMouse.click(MOUSE_RIGHT);
+          ClicRaton(MOUSE_RIGHT);
         }
       }
       MsPulsacion = 0;
@@ -373,13 +395,13 @@ void Calibrar()
 void SalidaPosicion()
 {
   Serial.print("\t\Pos X: ");
-  Serial.printf("%7.2f", PosX);
+  Serial.printf("%7.2f:", PosX);
   Serial.printf(", %7.2f", PosRatonX);
   Serial.print(" Y: ");
-  Serial.printf("%7.2f", PosY);
+  Serial.printf("%7.2f:", PosY);
   Serial.printf(", %7.2f", PosRatonY);
-  Serial.printf(", mejilla %d", analogRead(A0)-MejillaIni);
-  Serial.printf(", FiltroAlabeo %7.2f", filtroAlabeo);
+  Serial.printf(", mejilla: %d:", analogRead(A0)-MejillaIni);
+  Serial.printf(", FiltroAlabeo: %7.2f:", filtroAlabeo);
   Serial.println("");
 }
 
@@ -632,3 +654,147 @@ bool AlabeoActivo()
   }
   return false;
 }
+
+void LeerConfiguracion()
+{
+  delay(ESPERA_CFG);
+  int pos =0;
+  int Codigo = EEPROM.readShort(pos);
+  if (Codigo == COD_INI)
+  {
+      pos += sizeof(int);
+      MULTIPLO_DELTA_X = EEPROM.readShort(pos);
+      pos += sizeof(int);
+      MULTIPLO_DELTA_Y = EEPROM.readShort(pos);
+      pos += sizeof(int);
+      PULSACION_CORTA_MS = EEPROM.readShort(pos);
+      pos += sizeof(int);
+      PULSACION_MEDIA_MS = EEPROM.readShort(pos);
+      pos += sizeof(int);
+      PULSACION_LARGA_MS = EEPROM.readShort(pos);
+      pos += sizeof(int);
+      PULSACION_ADC = EEPROM.readShort(pos);
+      pos += sizeof(int);
+      ALABEO_SCROLL_MIN_NEG = EEPROM.readFloat(pos);
+      pos += sizeof(float);
+      ALABEO_SCROLL_MAX_NEG = EEPROM.readFloat(pos);
+      pos += sizeof(float);
+      ALABEO_SCROLL_MIN_POS = EEPROM.readFloat(pos);
+      pos += sizeof(float);
+      ALABEO_SCROLL_MAX_POS = EEPROM.readFloat(pos);
+      pos += sizeof(float);
+      CORRECION_ALABEO_DER = EEPROM.readFloat(pos);
+      pos += sizeof(float);
+      TIEMPO_MIN_SCROLL = EEPROM.readShort(pos);
+      pos += sizeof(int);
+      DIRECCION = EEPROM.readShort(pos);
+      pos += sizeof(int);
+      PULSACION = EEPROM.readShort(pos);
+      pos += sizeof(int);
+      SCROLL = EEPROM.readShort(pos);
+      pos += sizeof(int);
+      MOVIMIENTO = EEPROM.readShort(pos);
+      pos += sizeof(int);
+      CLIC_DER = EEPROM.readShort(pos);
+      pos += sizeof(int);
+      CLIC_IZQ = EEPROM.readShort(pos);
+      pos += sizeof(int);
+      CLIC_MEDIO = EEPROM.readShort(pos);
+      pos += sizeof(int);
+      ACCIONES = EEPROM.readShort(pos);
+      pos += sizeof(int);
+      CFG_MODO = EEPROM.readShort(pos);
+
+      LecturaCfg();
+ }
+ else Serial.println("Cfg no guardada.");
+}
+
+void LecturaCfg()
+{
+Serial.print("@#C:");
+Serial.print(MULTIPLO_DELTA_X);
+Serial.print(",");
+Serial.print(MULTIPLO_DELTA_Y);
+Serial.print(",");
+Serial.print(PULSACION_CORTA_MS);
+Serial.print(",");
+Serial.print(PULSACION_MEDIA_MS);
+Serial.print(",");
+Serial.print(PULSACION_LARGA_MS);
+Serial.print(",");
+Serial.print(PULSACION_ADC);
+Serial.print(",");
+Serial.print(ALABEO_SCROLL_MIN_NEG);
+Serial.print(",");
+Serial.print(ALABEO_SCROLL_MAX_NEG);
+Serial.print(",");
+Serial.print(ALABEO_SCROLL_MIN_POS);
+Serial.print(",");
+Serial.print(ALABEO_SCROLL_MAX_POS);
+Serial.print(",");
+Serial.print(CORRECION_ALABEO_DER);
+Serial.print(",");
+Serial.print(TIEMPO_MIN_SCROLL);
+Serial.print(",");
+Serial.print(DIRECCION);
+Serial.print(",");
+Serial.print(PULSACION);
+Serial.print(",");
+Serial.print(SCROLL);
+Serial.print(",");
+Serial.print(MOVIMIENTO);
+Serial.print(",");
+Serial.print(CLIC_DER);
+Serial.print(",");
+Serial.print(CLIC_IZQ);
+Serial.print(",");
+Serial.print(CLIC_MEDIO);
+Serial.print(",");
+Serial.print(ACCIONES);
+Serial.print(",");
+Serial.print(CFG_MODO);
+Serial.print(",");
+Serial.println("END;.");
+}
+
+void MoverRaton(signed char x, signed char y)
+ {
+      if (MOVIMIENTO == 1) bleMouse.move(x,y);
+ }
+ void ScrollRaton(signed char s) 
+ {
+      if (SCROLL) bleMouse.move(0,0,s);
+ }
+
+ void PulsarRaton(uint8_t boton)
+ {
+        if (PULSACION) bleMouse.press(boton);
+ }
+ void LiberarRaton(uint8_t boton)
+ {
+        if (PULSACION) bleMouse.release(boton);
+ }
+ void ClicRaton(uint8_t boton)
+ {
+    switch(boton)
+    {
+      case MOUSE_MIDDLE:
+      {
+        if (CLIC_MEDIO) bleMouse.click(boton);
+        break;
+      }
+      case MOUSE_LEFT:
+      {
+        if (CLIC_IZQ) bleMouse.click(boton);
+        break;
+      }
+      case MOUSE_RIGHT:
+      {
+        if (CLIC_DER) bleMouse.click(boton);
+        break;
+      }
+    }
+    
+ }
+

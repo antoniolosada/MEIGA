@@ -52,6 +52,7 @@ void ProcesarCadena(char *Cadena)
     {
 	  case 'R':
       {
+        ESP.restart();
       }
 	  case 'G':
       { 

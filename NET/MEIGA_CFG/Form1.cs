@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +17,20 @@ namespace MEIGA_CFG
 {
     public partial class Form1 : Form
     {
+        //Control del ratón ***************************************************************************************************************************************
+        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, UIntPtr dwExtraInfo);
+        private const uint MOUSEEVENTF_LEFTDOWN = 0x02;
+        private const uint MOUSEEVENTF_LEFTUP = 0x04;
+        private const uint MOUSEEVENTF_RIGHTDOWN = 0x08;
+        private const uint MOUSEEVENTF_RIGHTUP = 0x10;
+
+        private const uint MOUSEEVENTF_MIDDLEDOWN = 0x20;
+        private const uint MOUSEEVENTF_MIDDLEUP = 0x40;
+        private const uint MOUSEEVENTF_MOVE = 0x1;
+        private const uint MOUSEEVENTF_ABSOLUTE = 0x8000;
+        //Control del ratón ***************************************************************************************************************************************
+
         static Form1 sFrm;
         const int MIN_MENSAJE = 39;
         const int PARADO = 0;
@@ -41,6 +56,8 @@ namespace MEIGA_CFG
         static string UltimoComando = "";
         static float UltPosX = 0;
         static float UltPosY = 0;
+        int Boton1 = 0;
+        int Boton2 = 0;
 
         public Form1()
         {
@@ -187,6 +204,27 @@ namespace MEIGA_CFG
                 {
                     LeerConfiguracion(Comando.Substring(4));
                     MessageBox.Show("Configuración recuperada.");
+                }
+                else if (Comando.Substring(0, 3) == "@LP")
+                {
+                    int p1, p2;
+                    p1 = int.Parse(Comando.Substring(4, 1));
+                    p2 = int.Parse(Comando.Substring(6, 1));
+
+                    if ((Boton1 == 0) && (p1 == 1))
+                        if (chkInvertirBotones.Checked)
+                            sendMouseClickRight();
+                        else
+                            sendMouseClickLeft();
+
+                    if ((Boton2 == 0) && (p2 == 1))
+                        if (chkInvertirBotones.Checked)
+                            sendMouseClickLeft();
+                        else
+                            sendMouseClickRight();
+
+                    Boton1 = p1;
+                    Boton2 = p2;
                 }
         }
         int v1 = 0;
@@ -448,6 +486,7 @@ namespace MEIGA_CFG
         }
         int NumeroPuerto = 0;
         int NumPuertoScan = 0;
+        string Dispositivo = "";
         private void btSCAN_Click(object sender, EventArgs e)
         {
             btSCAN.Enabled = false;
@@ -484,7 +523,15 @@ namespace MEIGA_CFG
             SerialPort sp = (SerialPort)sender;
             string entradaDatos = sp.ReadExisting(); // Almacena los datos recibidos en la variable tipo string.
             if (entradaDatos.IndexOf("Pos X:") > 0)
+            {
                 sFrm.NumPuertoScan = sFrm.NumeroPuerto;
+                sFrm.Dispositivo = "MEIGA";
+            }
+            else if (entradaDatos.IndexOf("@LP:") > 0)
+            {
+                sFrm.NumPuertoScan = sFrm.NumeroPuerto;
+                sFrm.Dispositivo = "Pulsador";
+            }
         }
 
         private void tmrEsperaCierrePuerto_Tick(object sender, EventArgs e)
@@ -501,7 +548,7 @@ namespace MEIGA_CFG
             else
             {
                 tmrEsperaCierrePuerto.Enabled = false;
-                MessageBox.Show("MEIGA está en el puerto COM" + NumPuertoScan.ToString());
+                MessageBox.Show(Dispositivo + " está en el puerto COM" + NumPuertoScan.ToString());
                 btSCAN.Enabled = true;
                 NumPuertoScan = 0;
             }
@@ -511,5 +558,14 @@ namespace MEIGA_CFG
         {
             e.Handled = true;
         }
+        public void sendMouseClickLeft()
+        {
+            mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, (UIntPtr)0);
+        }
+        public void sendMouseClickRight()
+        {
+            mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, (UIntPtr)0);
+        }
     }
+
 }

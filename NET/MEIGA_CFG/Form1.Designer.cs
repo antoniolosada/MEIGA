@@ -95,6 +95,7 @@
             this.chkAcciones = new System.Windows.Forms.CheckBox();
             this.btSCAN = new System.Windows.Forms.Button();
             this.tmrEsperaCierrePuerto = new System.Windows.Forms.Timer(this.components);
+            this.chkInvertirBotones = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -229,7 +230,7 @@
             // tbComando
             // 
             this.tbComando.Enabled = false;
-            this.tbComando.Location = new System.Drawing.Point(44, 225);
+            this.tbComando.Location = new System.Drawing.Point(44, 204);
             this.tbComando.Name = "tbComando";
             this.tbComando.Size = new System.Drawing.Size(564, 20);
             this.tbComando.TabIndex = 10;
@@ -817,11 +818,23 @@
             this.tmrEsperaCierrePuerto.Interval = 2000;
             this.tmrEsperaCierrePuerto.Tick += new System.EventHandler(this.tmrEsperaCierrePuerto_Tick);
             // 
+            // chkInvertirBotones
+            // 
+            this.chkInvertirBotones.AutoSize = true;
+            this.chkInvertirBotones.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkInvertirBotones.Location = new System.Drawing.Point(511, 246);
+            this.chkInvertirBotones.Name = "chkInvertirBotones";
+            this.chkInvertirBotones.Size = new System.Drawing.Size(140, 24);
+            this.chkInvertirBotones.TabIndex = 64;
+            this.chkInvertirBotones.Text = "Invertir Botones";
+            this.chkInvertirBotones.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(895, 497);
+            this.Controls.Add(this.chkInvertirBotones);
             this.Controls.Add(this.btSCAN);
             this.Controls.Add(this.chkAcciones);
             this.Controls.Add(this.btLeerCfg);
@@ -961,6 +974,7 @@
         private System.Windows.Forms.CheckBox chkAcciones;
         private System.Windows.Forms.Button btSCAN;
         private System.Windows.Forms.Timer tmrEsperaCierrePuerto;
+        private System.Windows.Forms.CheckBox chkInvertirBotones;
     }
 }
 

@@ -96,6 +96,8 @@
             this.btSCAN = new System.Windows.Forms.Button();
             this.tmrEsperaCierrePuerto = new System.Windows.Forms.Timer(this.components);
             this.chkInvertirBotones = new System.Windows.Forms.CheckBox();
+            this.lblBoton2 = new System.Windows.Forms.Label();
+            this.lblBoton1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -232,7 +234,7 @@
             this.tbComando.Enabled = false;
             this.tbComando.Location = new System.Drawing.Point(44, 204);
             this.tbComando.Name = "tbComando";
-            this.tbComando.Size = new System.Drawing.Size(564, 20);
+            this.tbComando.Size = new System.Drawing.Size(481, 20);
             this.tbComando.TabIndex = 10;
             // 
             // tbL
@@ -829,11 +831,33 @@
             this.chkInvertirBotones.Text = "Invertir Botones";
             this.chkInvertirBotones.UseVisualStyleBackColor = true;
             // 
+            // lblBoton2
+            // 
+            this.lblBoton2.BackColor = System.Drawing.Color.Yellow;
+            this.lblBoton2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblBoton2.Location = new System.Drawing.Point(559, 201);
+            this.lblBoton2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblBoton2.Name = "lblBoton2";
+            this.lblBoton2.Size = new System.Drawing.Size(25, 25);
+            this.lblBoton2.TabIndex = 65;
+            // 
+            // lblBoton1
+            // 
+            this.lblBoton1.BackColor = System.Drawing.Color.Yellow;
+            this.lblBoton1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblBoton1.Location = new System.Drawing.Point(530, 201);
+            this.lblBoton1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblBoton1.Name = "lblBoton1";
+            this.lblBoton1.Size = new System.Drawing.Size(25, 25);
+            this.lblBoton1.TabIndex = 66;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(895, 497);
+            this.Controls.Add(this.lblBoton1);
+            this.Controls.Add(this.lblBoton2);
             this.Controls.Add(this.chkInvertirBotones);
             this.Controls.Add(this.btSCAN);
             this.Controls.Add(this.chkAcciones);
@@ -975,6 +999,8 @@
         private System.Windows.Forms.Button btSCAN;
         private System.Windows.Forms.Timer tmrEsperaCierrePuerto;
         private System.Windows.Forms.CheckBox chkInvertirBotones;
+        private System.Windows.Forms.Label lblBoton2;
+        private System.Windows.Forms.Label lblBoton1;
     }
 }
 

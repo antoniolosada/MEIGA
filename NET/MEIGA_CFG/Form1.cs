@@ -142,7 +142,37 @@ namespace MEIGA_CFG
         private void ProcesarComando(string Comando)
         {
             string Valor = "";
-            if (Comando.Length > MIN_MENSAJE)
+            if (Comando.Substring(0, 3) == "@LP")
+            {
+                int p1, p2;
+                p1 = int.Parse(Comando.Substring(4, 1));
+                p2 = int.Parse(Comando.Substring(6, 1));
+
+                if ((Boton1 == 0) && (p1 == 1))
+                    if (chkInvertirBotones.Checked)
+                        sendMouseClickRight();
+                    else
+                        sendMouseClickLeft();
+
+                if ((Boton2 == 0) && (p2 == 1))
+                    if (chkInvertirBotones.Checked)
+                        sendMouseClickLeft();
+                    else
+                        sendMouseClickRight();
+
+                Boton1 = p1;
+                Boton2 = p2;
+
+                if (Boton1 == 1)
+                    lblBoton1.BackColor = Color.LightGreen;
+                else
+                    lblBoton1.BackColor = Color.LightYellow;
+                if (Boton2 == 1)
+                    lblBoton2.BackColor = Color.LightGreen;
+                else
+                    lblBoton2.BackColor = Color.LightYellow;
+            }
+            else if (Comando.Length > MIN_MENSAJE)
                 if (Comando.Substring(1, 6) == "Pos X:")
                 {
                     string s = RecuperarValor(Comando, "X:");
@@ -204,27 +234,6 @@ namespace MEIGA_CFG
                 {
                     LeerConfiguracion(Comando.Substring(4));
                     MessageBox.Show("Configuración recuperada.");
-                }
-                else if (Comando.Substring(0, 3) == "@LP")
-                {
-                    int p1, p2;
-                    p1 = int.Parse(Comando.Substring(4, 1));
-                    p2 = int.Parse(Comando.Substring(6, 1));
-
-                    if ((Boton1 == 0) && (p1 == 1))
-                        if (chkInvertirBotones.Checked)
-                            sendMouseClickRight();
-                        else
-                            sendMouseClickLeft();
-
-                    if ((Boton2 == 0) && (p2 == 1))
-                        if (chkInvertirBotones.Checked)
-                            sendMouseClickLeft();
-                        else
-                            sendMouseClickRight();
-
-                    Boton1 = p1;
-                    Boton2 = p2;
                 }
         }
         int v1 = 0;
@@ -522,12 +531,12 @@ namespace MEIGA_CFG
         {
             SerialPort sp = (SerialPort)sender;
             string entradaDatos = sp.ReadExisting(); // Almacena los datos recibidos en la variable tipo string.
-            if (entradaDatos.IndexOf("Pos X:") > 0)
+            if (entradaDatos.IndexOf("Pos X:") >= 0)
             {
                 sFrm.NumPuertoScan = sFrm.NumeroPuerto;
                 sFrm.Dispositivo = "MEIGA";
             }
-            else if (entradaDatos.IndexOf("@LP:") > 0)
+            else if (entradaDatos.IndexOf("@LP:") >= 0)
             {
                 sFrm.NumPuertoScan = sFrm.NumeroPuerto;
                 sFrm.Dispositivo = "Pulsador";

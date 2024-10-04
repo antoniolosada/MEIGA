@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Configuration;
 
 namespace MEIGA_CFG
 {
@@ -49,15 +50,26 @@ namespace MEIGA_CFG
         const int MAX_PULSACION = 10000;
         const int MAX_TIEMPO_SCROLL = 2000;
 
+        const int DISP_PULSADOR = 1;
+        const int DISP_MEIGA = 0;
         int giEstado;
+        int giEstadoPulsador;
         SerialPort PuertoSerie;
+        SerialPort PuertoSeriePulsador;
         SerialPort PuertoScan;
+        int NumPuertoMeiga = 0;
+        int NumPuertoPulsador = 0;
         static string TextoCom = "";
+        static string TextoComPulsador = "";
         static string UltimoComando = "";
+        static string UltimoComandoPulsador = "";
         static float UltPosX = 0;
         static float UltPosY = 0;
         int Boton1 = 0;
         int Boton2 = 0;
+        static string sPuertoMEIGA = "";
+        static string sPuertoPulsador = "";
+        Cursor Raton;
 
         public Form1()
         {
@@ -65,30 +77,32 @@ namespace MEIGA_CFG
             sFrm = this;
             // Create a new SerialPort object with default settings.
             PuertoSerie = new SerialPort();
+            PuertoSeriePulsador = new SerialPort();
+            PuertoScan = new SerialPort();
             cbCfgModo.SelectedIndex = 0;
             this.Text = "MEIGA Config. Módulo Espacial de Integración de Giróscopo y Acelerómetro (v"+ Application.ProductVersion+")";
         }
 
         private void btConectar_Click(object sender, EventArgs e)
         {
-            ConectarArduino();
+            sPuertoMEIGA = cbPuerto.Text;
+            PuertoSerie.PortName = cbPuerto.Text;
+            ConectarArduino(PuertoSerie, ref giEstado, DISP_MEIGA);
             btConectar.Enabled = false;
             btDesconectar.Enabled = true;
             btGrabar.Enabled = true;    
             btLeerCfg.Enabled = true;
             DesactivarCampos(false);
         }
-        private void ConectarArduino()
+        private void ConectarArduino(SerialPort PuertoSerie, ref int giEstado, int Dispositivo)
         {
             try
             {
                 if (giEstado == PARADO)
                 {
                     giEstado = ARRANCADO;
-                    cbPuerto.BackColor = Color.LightGreen;
 
                     // Allow the user to set the appropriate properties.
-                    PuertoSerie.PortName = cbPuerto.Text;
                     PuertoSerie.BaudRate = 115200;
                     PuertoSerie.Parity = Parity.None;
                     PuertoSerie.DataBits = 8;
@@ -102,9 +116,16 @@ namespace MEIGA_CFG
                     PuertoSerie.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                     PuertoSerie.Open();
 
-                    tmrLeerDatosArduino.Enabled = true;
-
-                    cbPuerto.BackColor = Color.Green;
+                    if (Dispositivo == DISP_PULSADOR)
+                    {
+                        tmrLeerDatosArduinoPulsador.Enabled = true;
+                        cbPuertoPulsador.BackColor = Color.LightGreen;
+                    }
+                    else
+                    {
+                        tmrLeerDatosArduino.Enabled = true;
+                        cbPuerto.BackColor = Color.LightGreen;
+                    }
                 }
             }
             catch (Exception ex)
@@ -116,49 +137,110 @@ namespace MEIGA_CFG
         private static void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort sp = (SerialPort)sender;
+            int Disp = (sp.PortName == sPuertoMEIGA) ? DISP_MEIGA : DISP_PULSADOR;
             string entradaDatos = sp.ReadExisting(); // Almacena los datos recibidos en la variable tipo string.
-            TextoCom = TextoCom + entradaDatos;
-            string comando = sFrm.RecuperarComando();
+            if (Disp == DISP_MEIGA)
+                TextoCom = TextoCom + entradaDatos;
+            else
+                TextoComPulsador = TextoComPulsador + entradaDatos;
+            string comando = sFrm.RecuperarComando(Disp);
             if (comando != "")
             {
-                if (UltimoComando.Length > 1)
-                    if (UltimoComando.Substring(0, 1) == "@")
-                        return;
-                UltimoComando = comando;
-                TextoCom = "";
+                try
+                {
+                    if (Disp == DISP_MEIGA)
+                    {
+                        if (UltimoComando.Length > 1)
+                            if (UltimoComando.Substring(0, 1) == "@")
+                                return;
+                        UltimoComando = comando;
+                        TextoCom = "";
+                    }
+                    else
+                    {
+                        if (UltimoComandoPulsador.Length > 1)
+                            if (UltimoComandoPulsador.Substring(0, 1) == "@")
+                                return;
+                        UltimoComandoPulsador = comando;
+                        TextoComPulsador = "";
+                    }
+                }
+                catch (Exception ex){ }
             } 
         }
 
-        private void tmrLeerDatosArduino_Tick(object sender, EventArgs e)
-        {
-            if (UltimoComando != "")
-            {
-                tbComando.Text = UltimoComando;
-                tbComando.Refresh();
-                UltimoComando = "";
-                ProcesarComando(tbComando.Text);
-            }
-        }
         private void ProcesarComando(string Comando)
         {
             string Valor = "";
-            if (Comando.Substring(0, 3) == "@LP")
+            if (Comando.Substring(0, 3) == "@#P")
+            {
+                string comando = Comando.Substring(3);
+                int px = comando.IndexOf(',');
+                if (px <= 0) return;
+                int x = int.Parse(comando.Substring(0, px));
+                int py = comando.IndexOf(';', px + 1);
+                int y = int.Parse(comando.Substring(px + 1, py - px - 1));
+                Point p = Cursor.Position;
+                p.X += x*2;
+                p.Y -= y*2;
+                Cursor.Position = p;
+            }
+            else if (Comando.Substring(0, 3) == "@LP")
             {
                 int p1, p2;
                 p1 = int.Parse(Comando.Substring(4, 1));
                 p2 = int.Parse(Comando.Substring(6, 1));
 
                 if ((Boton1 == 0) && (p1 == 1))
-                    if (chkInvertirBotones.Checked)
-                        sendMouseClickRight();
+                {
+                    if (chkPulsador.Checked)
+                    {
+                        if (chkInvertirBotones.Checked)
+                            sendMousePressRight();
+                        else
+                            sendMousePressLeft();
+                    }
                     else
-                        sendMouseClickLeft();
+                    {
+                        if (chkInvertirBotones.Checked)
+                            sendMouseClickRight();
+                        else
+                            sendMouseClickLeft();
+                    }
+                }
+                else if (((Boton1 == 1) && (p1 == 0)) && chkPulsador.Checked)
+                {
+                    if (chkInvertirBotones.Checked)
+                        sendMouseReleaseRight();
+                    else
+                        sendMouseReleaseLeft();
+                }
 
                 if ((Boton2 == 0) && (p2 == 1))
-                    if (chkInvertirBotones.Checked)
-                        sendMouseClickLeft();
+                {
+                    if (chkPulsador.Checked)
+                    {
+                        if (chkInvertirBotones.Checked)
+                            sendMousePressLeft();
+                        else
+                            sendMousePressRight();
+                    }
                     else
-                        sendMouseClickRight();
+                    {
+                        if (chkInvertirBotones.Checked)
+                            sendMouseClickLeft();
+                        else
+                            sendMouseClickRight();
+                    }
+                }
+                else if (((Boton2 == 1) && (p2 == 0)) && chkPulsador.Checked)
+                {
+                    if (chkInvertirBotones.Checked)
+                        sendMouseReleaseLeft();
+                    else
+                        sendMouseReleaseRight();
+                }
+
 
                 Boton1 = p1;
                 Boton2 = p2;
@@ -256,19 +338,27 @@ namespace MEIGA_CFG
             }
             return "";
         }
-        private string RecuperarComando()
+        private string RecuperarComando(int Disp)
         {
-            string lectura = TextoCom;
+            string lectura = (Disp == DISP_MEIGA) ?TextoCom: TextoComPulsador;
             int pos = lectura.IndexOf((char)10);
             string comando;
-            if (pos > 0)
+            if (pos == 0)
+            {
+                lectura = "." + lectura;
+                pos = 1;
+            } 
+            if (pos >=0)
             {
                 comando = lectura.Substring(0, pos-1);
                 if (lectura.Length > pos + 1)
                     lectura = lectura.Substring(pos + 1);
                 else
                     lectura = "";
-                TextoCom = lectura;
+                if (Disp == DISP_MEIGA)
+                    TextoCom = lectura;
+                else
+                    TextoComPulsador = lectura;
                 return comando;
             }
             return "";
@@ -506,10 +596,9 @@ namespace MEIGA_CFG
             try
             {
                 NumeroPuerto = n_puerto;
-                cbPuerto.Text = "COM" + n_puerto.ToString();
-                PuertoScan = new SerialPort();
+                btSCAN.Text = "COM" + n_puerto.ToString();
                 // Allow the user to set the appropriate properties.
-                PuertoScan.PortName = cbPuerto.Text;
+                PuertoScan.PortName = btSCAN.Text;
                 PuertoScan.BaudRate = 115200;
                 PuertoScan.Parity = Parity.None;
                 PuertoScan.DataBits = 8;
@@ -523,7 +612,7 @@ namespace MEIGA_CFG
                 PuertoScan.DataReceived += new SerialDataReceivedEventHandler(DataReceivedScan);
                 PuertoScan.Open();
             }
-            catch (Exception ex) { }
+            catch (Exception ex) {}
 
             tmrEsperaCierrePuerto.Enabled = true;
         }
@@ -531,38 +620,65 @@ namespace MEIGA_CFG
         {
             SerialPort sp = (SerialPort)sender;
             string entradaDatos = sp.ReadExisting(); // Almacena los datos recibidos en la variable tipo string.
-            if (entradaDatos.IndexOf("Pos X:") >= 0)
+            if ((entradaDatos.IndexOf("Pos X:") >= 0) || ((entradaDatos.IndexOf("@#P") >= 0)))
             {
-                sFrm.NumPuertoScan = sFrm.NumeroPuerto;
+                sFrm.NumPuertoMeiga = sFrm.NumeroPuerto;
                 sFrm.Dispositivo = "MEIGA";
             }
             else if (entradaDatos.IndexOf("@LP:") >= 0)
             {
-                sFrm.NumPuertoScan = sFrm.NumeroPuerto;
+                sFrm.NumPuertoPulsador = sFrm.NumeroPuerto;
                 sFrm.Dispositivo = "Pulsador";
             }
         }
 
         private void tmrEsperaCierrePuerto_Tick(object sender, EventArgs e)
         {
+            tmrEsperaCierrePuerto.Enabled = false;
             try
             {
                 PuertoScan.Close();
-                PuertoScan.Dispose();
             }
             catch (Exception ex) { }
 
-            if ((NumPuertoScan == 0) && (NumPuertoScan <= 30))
-                EscanearPuerto(NumeroPuerto + 1);
+            if (NumeroPuerto == 41)
+            {
+                ScanFinalizado();
+                return;
+            }
             else
             {
-                tmrEsperaCierrePuerto.Enabled = false;
-                MessageBox.Show(Dispositivo + " está en el puerto COM" + NumPuertoScan.ToString());
-                btSCAN.Enabled = true;
-                NumPuertoScan = 0;
+                int puerto=0;
+                if (sFrm.Dispositivo == "MEIGA")
+                {
+                    cbPuerto.Text = "COM" + NumPuertoMeiga.ToString();
+                    puerto = NumPuertoMeiga;
+                }
+                else if (sFrm.Dispositivo == "Pulsador")
+                {
+                    cbPuertoPulsador.Text = "COM" + NumPuertoPulsador.ToString();
+                    puerto = NumPuertoPulsador;
+                }
+                if (puerto > 0)
+                {
+                    Dispositivo = sFrm.Dispositivo;
+                    MessageBox.Show(Dispositivo + " está en el puerto COM" + puerto.ToString());
+                    sFrm.Dispositivo = "";
+                }
             }
+            if ((NumPuertoMeiga == 0) || (NumPuertoPulsador == 0))
+                EscanearPuerto(NumeroPuerto + 1);
+            else
+                ScanFinalizado();
         }
-
+        void ScanFinalizado()
+        {
+            tmrEsperaCierrePuerto.Enabled = false;
+            btSCAN.Enabled = true;
+            btSCAN.Text = "SCAN";
+            NumPuertoScan = 0;
+            MessageBox.Show("Escaneo de puertos finalizado.");
+        }
         private void cbPuerto_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = true;
@@ -574,6 +690,66 @@ namespace MEIGA_CFG
         public void sendMouseClickRight()
         {
             mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, (UIntPtr)0);
+        }
+        public void sendMousePressLeft()
+        {
+            mouse_event(MOUSEEVENTF_LEFTDOWN, (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, (UIntPtr)0);
+        }
+        public void sendMousePressRight()
+        {
+            mouse_event(MOUSEEVENTF_RIGHTDOWN , (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, (UIntPtr)0);
+        }
+        public void sendMouseReleaseLeft()
+        {
+            mouse_event(MOUSEEVENTF_LEFTUP, (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, (UIntPtr)0);
+        }
+        public void sendMouseReleaseRight()
+        {
+            mouse_event(MOUSEEVENTF_RIGHTUP, (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, (UIntPtr)0);
+        }
+
+        private void btConectarPulsador_Click(object sender, EventArgs e)
+        {
+            sPuertoPulsador = cbPuertoPulsador.Text;
+            PuertoSeriePulsador.PortName = cbPuertoPulsador.Text;
+            ConectarArduino(PuertoSeriePulsador, ref giEstadoPulsador, DISP_PULSADOR);
+            btConectarPulsador.Enabled = false;
+            btDesconectarPulsador.Enabled = true;
+        }
+
+        private void tmrLeerDatosArduinoPulsador_Tick(object sender, EventArgs e)
+        {
+            if (UltimoComandoPulsador != "")
+            {
+                string comando = tbComando.Text = UltimoComandoPulsador;
+                tbComando.Refresh();
+                UltimoComandoPulsador = "";
+                ProcesarComando(comando);
+            }
+        }
+        private void tmrLeerDatosArduino_Tick(object sender, EventArgs e)
+        {
+            if (UltimoComando != "")
+            {
+                string comando = tbComando.Text = UltimoComando;
+                tbComando.Refresh();
+                UltimoComando = "";
+                ProcesarComando(comando);
+            }
+        }
+
+        private void btDesconectarPulsador_Click(object sender, EventArgs e)
+        {
+            PuertoSeriePulsador.Close();
+            cbPuertoPulsador.BackColor = Color.Red;
+            //btConectar.Enabled = true;
+            btDesconectarPulsador.Enabled = false;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            cbPuerto.Text = ConfigurationManager.AppSettings["PuertoMeiga"];
+            cbPuertoPulsador.Text = ConfigurationManager.AppSettings["PuertoPulsador"];
         }
     }
 

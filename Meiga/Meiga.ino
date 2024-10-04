@@ -155,7 +155,10 @@ void setup(void)
   {
     Serial.println("Failed to find MPU6050 chip");
     while (1) {
-      delay(10);
+      digitalWrite(13, LOW);
+      delay(500);
+      digitalWrite(13, HIGH);
+      delay(500);
     }
   }
 
@@ -233,16 +236,32 @@ void loop()
   }
   if (MeigaActivo)
   {
-    if (FinContador(C_RATON)) ControlRaton();
+    if (FinContador(C_RATON))
+    {
+      ControlRaton();
+      if (bleMouse.isConnected() && LOG_SALIDA) SalidaPosicion();    
+    } 
   }
 
-  if (LOG_SALIDA) SalidaPosicion();    
   if (!calibracion) ActivarMeiga();
-
+  
   LOG_FIN();
 }
 
 //************************************************  END LOOP  ******************************************************************************************************************************
+
+void SalidaMovRaton(int MovX, int MovY)
+{
+    Serial.print("@#P");
+    Serial.print(MovX*DIRECCION);
+    Serial.print(",");
+    Serial.print(-MovY);
+    Serial.print(";");
+    Serial.print(DIRECCION);
+    Serial.print(";");
+    Serial.print(MovX);
+    Serial.println(";#.");
+}
 
 void ControlRaton()
 {
@@ -260,7 +279,11 @@ void ControlRaton()
   int MovX = deltaX/deltaMs*MultiploX;
   int MovY = deltaY/deltaMs*MultiploY;
 
-  if(bleMouse.isConnected()) 
+  if(!bleMouse.isConnected()) 
+  {
+      SalidaMovRaton(MovX, -MovY);
+  }
+  else
   {
     MoverRaton(MovX*DIRECCION, -MovY);
 
@@ -598,7 +621,7 @@ void IniciarContadorMs(int c, long ms)
 
 bool FinContador(int c)
 {
-  if (millis()-ContadoresMs[c].MaxMs > ContadoresMs[c].Ms)
+  if (millis()-ContadoresMs[c].Ms > ContadoresMs[c].MaxMs)
   {
     ContadoresMs[c].Ms = millis();
     return true;

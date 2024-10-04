@@ -98,6 +98,12 @@
             this.chkInvertirBotones = new System.Windows.Forms.CheckBox();
             this.lblBoton2 = new System.Windows.Forms.Label();
             this.lblBoton1 = new System.Windows.Forms.Label();
+            this.chkPulsador = new System.Windows.Forms.CheckBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.cbPuertoPulsador = new System.Windows.Forms.ComboBox();
+            this.btConectarPulsador = new System.Windows.Forms.Button();
+            this.btDesconectarPulsador = new System.Windows.Forms.Button();
+            this.tmrLeerDatosArduinoPulsador = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -136,27 +142,27 @@
             "COM28",
             "COM29",
             "COM30"});
-            this.cbPuerto.Location = new System.Drawing.Point(97, 25);
+            this.cbPuerto.Location = new System.Drawing.Point(98, 9);
             this.cbPuerto.Name = "cbPuerto";
             this.cbPuerto.Size = new System.Drawing.Size(100, 28);
             this.cbPuerto.TabIndex = 0;
-            this.cbPuerto.Text = "COM20";
+            this.cbPuerto.Text = "COM1";
             this.cbPuerto.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cbPuerto_KeyPress);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(35, 28);
+            this.label1.Location = new System.Drawing.Point(36, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(56, 20);
+            this.label1.Size = new System.Drawing.Size(62, 20);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Puerto";
+            this.label1.Text = "MEIGA";
             // 
             // tbPosX
             // 
             this.tbPosX.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbPosX.Location = new System.Drawing.Point(97, 73);
+            this.tbPosX.Location = new System.Drawing.Point(97, 83);
             this.tbPosX.Name = "tbPosX";
             this.tbPosX.Size = new System.Drawing.Size(100, 26);
             this.tbPosX.TabIndex = 2;
@@ -166,7 +172,7 @@
             // tbPosY
             // 
             this.tbPosY.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbPosY.Location = new System.Drawing.Point(97, 102);
+            this.tbPosY.Location = new System.Drawing.Point(97, 112);
             this.tbPosY.Name = "tbPosY";
             this.tbPosY.Size = new System.Drawing.Size(100, 26);
             this.tbPosY.TabIndex = 3;
@@ -205,23 +211,23 @@
             // 
             // btConectar
             // 
-            this.btConectar.Location = new System.Drawing.Point(203, 22);
+            this.btConectar.Location = new System.Drawing.Point(204, 6);
             this.btConectar.Name = "btConectar";
             this.btConectar.Size = new System.Drawing.Size(108, 33);
             this.btConectar.TabIndex = 7;
-            this.btConectar.Text = "Conectar";
+            this.btConectar.Text = "Conectar MEIGA";
             this.btConectar.UseVisualStyleBackColor = true;
             this.btConectar.Click += new System.EventHandler(this.btConectar_Click);
             // 
             // tmrLeerDatosArduino
             // 
-            this.tmrLeerDatosArduino.Interval = 50;
+            this.tmrLeerDatosArduino.Interval = 5;
             this.tmrLeerDatosArduino.Tick += new System.EventHandler(this.tmrLeerDatosArduino_Tick);
             // 
             // btDesconectar
             // 
             this.btDesconectar.Enabled = false;
-            this.btDesconectar.Location = new System.Drawing.Point(317, 22);
+            this.btDesconectar.Location = new System.Drawing.Point(318, 6);
             this.btDesconectar.Name = "btDesconectar";
             this.btDesconectar.Size = new System.Drawing.Size(93, 33);
             this.btDesconectar.TabIndex = 9;
@@ -232,9 +238,9 @@
             // tbComando
             // 
             this.tbComando.Enabled = false;
-            this.tbComando.Location = new System.Drawing.Point(44, 204);
+            this.tbComando.Location = new System.Drawing.Point(143, 204);
             this.tbComando.Name = "tbComando";
-            this.tbComando.Size = new System.Drawing.Size(481, 20);
+            this.tbComando.Size = new System.Drawing.Size(382, 20);
             this.tbComando.TabIndex = 10;
             // 
             // tbL
@@ -249,7 +255,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(36, 73);
+            this.label2.Location = new System.Drawing.Point(36, 83);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(47, 20);
             this.label2.TabIndex = 12;
@@ -260,7 +266,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(36, 105);
+            this.label3.Location = new System.Drawing.Point(36, 115);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(47, 20);
             this.label3.TabIndex = 13;
@@ -344,7 +350,7 @@
             // 
             // barPosX
             // 
-            this.barPosX.Location = new System.Drawing.Point(203, 73);
+            this.barPosX.Location = new System.Drawing.Point(203, 83);
             this.barPosX.Maximum = 4096;
             this.barPosX.Name = "barPosX";
             this.barPosX.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -353,7 +359,7 @@
             // 
             // barPosY
             // 
-            this.barPosY.Location = new System.Drawing.Point(203, 105);
+            this.barPosY.Location = new System.Drawing.Point(203, 115);
             this.barPosY.Maximum = 4096;
             this.barPosY.Name = "barPosY";
             this.barPosY.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -363,7 +369,7 @@
             // btGrabar
             // 
             this.btGrabar.Enabled = false;
-            this.btGrabar.Location = new System.Drawing.Point(416, 22);
+            this.btGrabar.Location = new System.Drawing.Point(417, 6);
             this.btGrabar.Name = "btGrabar";
             this.btGrabar.Size = new System.Drawing.Size(61, 32);
             this.btGrabar.TabIndex = 23;
@@ -373,7 +379,7 @@
             // 
             // btReiniciar
             // 
-            this.btReiniciar.Location = new System.Drawing.Point(549, 22);
+            this.btReiniciar.Location = new System.Drawing.Point(550, 6);
             this.btReiniciar.Name = "btReiniciar";
             this.btReiniciar.Size = new System.Drawing.Size(59, 32);
             this.btReiniciar.TabIndex = 24;
@@ -384,7 +390,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(129, 265);
+            this.pictureBox1.Location = new System.Drawing.Point(145, 256);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(333, 191);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -697,10 +703,10 @@
             // 
             this.lblMEjilla.BackColor = System.Drawing.Color.Yellow;
             this.lblMEjilla.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblMEjilla.Location = new System.Drawing.Point(588, 167);
+            this.lblMEjilla.Location = new System.Drawing.Point(588, 168);
             this.lblMEjilla.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblMEjilla.Name = "lblMEjilla";
-            this.lblMEjilla.Size = new System.Drawing.Size(25, 25);
+            this.lblMEjilla.Size = new System.Drawing.Size(25, 24);
             this.lblMEjilla.TabIndex = 54;
             // 
             // lblAlabeoNeg
@@ -710,17 +716,17 @@
             this.lblAlabeoNeg.Location = new System.Drawing.Point(202, 141);
             this.lblAlabeoNeg.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblAlabeoNeg.Name = "lblAlabeoNeg";
-            this.lblAlabeoNeg.Size = new System.Drawing.Size(25, 25);
+            this.lblAlabeoNeg.Size = new System.Drawing.Size(24, 22);
             this.lblAlabeoNeg.TabIndex = 55;
             // 
             // lblAlabeoPos
             // 
             this.lblAlabeoPos.BackColor = System.Drawing.Color.Yellow;
             this.lblAlabeoPos.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblAlabeoPos.Location = new System.Drawing.Point(588, 138);
+            this.lblAlabeoPos.Location = new System.Drawing.Point(588, 141);
             this.lblAlabeoPos.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblAlabeoPos.Name = "lblAlabeoPos";
-            this.lblAlabeoPos.Size = new System.Drawing.Size(25, 25);
+            this.lblAlabeoPos.Size = new System.Drawing.Size(25, 22);
             this.lblAlabeoPos.TabIndex = 56;
             // 
             // chkMovimiento
@@ -782,7 +788,7 @@
             // btLeerCfg
             // 
             this.btLeerCfg.Enabled = false;
-            this.btLeerCfg.Location = new System.Drawing.Point(482, 22);
+            this.btLeerCfg.Location = new System.Drawing.Point(483, 6);
             this.btLeerCfg.Name = "btLeerCfg";
             this.btLeerCfg.Size = new System.Drawing.Size(61, 32);
             this.btLeerCfg.TabIndex = 61;
@@ -807,7 +813,7 @@
             // btSCAN
             // 
             this.btSCAN.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btSCAN.Location = new System.Drawing.Point(25, 265);
+            this.btSCAN.Location = new System.Drawing.Point(39, 201);
             this.btSCAN.Name = "btSCAN";
             this.btSCAN.Size = new System.Drawing.Size(98, 38);
             this.btSCAN.TabIndex = 63;
@@ -851,11 +857,105 @@
             this.lblBoton1.Size = new System.Drawing.Size(25, 25);
             this.lblBoton1.TabIndex = 66;
             // 
+            // chkPulsador
+            // 
+            this.chkPulsador.AutoSize = true;
+            this.chkPulsador.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkPulsador.Location = new System.Drawing.Point(40, 264);
+            this.chkPulsador.Name = "chkPulsador";
+            this.chkPulsador.Size = new System.Drawing.Size(98, 24);
+            this.chkPulsador.TabIndex = 67;
+            this.chkPulsador.Text = "Pulsar/clic";
+            this.chkPulsador.UseVisualStyleBackColor = true;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.Location = new System.Drawing.Point(24, 43);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(71, 20);
+            this.label20.TabIndex = 68;
+            this.label20.Text = "Pulsador";
+            // 
+            // cbPuertoPulsador
+            // 
+            this.cbPuertoPulsador.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbPuertoPulsador.FormattingEnabled = true;
+            this.cbPuertoPulsador.Items.AddRange(new object[] {
+            "COM1",
+            "COM2",
+            "COM3",
+            "COM4",
+            "COM5",
+            "COM6",
+            "COM7",
+            "COM8",
+            "COM9",
+            "COM10",
+            "COM11",
+            "COM12",
+            "COM13",
+            "COM14",
+            "COM15",
+            "COM16",
+            "COM17",
+            "COM18",
+            "COM19",
+            "COM20",
+            "COM21",
+            "COM22",
+            "COM23",
+            "COM24",
+            "COM25",
+            "COM26",
+            "COM27",
+            "COM28",
+            "COM29",
+            "COM30"});
+            this.cbPuertoPulsador.Location = new System.Drawing.Point(98, 43);
+            this.cbPuertoPulsador.Name = "cbPuertoPulsador";
+            this.cbPuertoPulsador.Size = new System.Drawing.Size(100, 28);
+            this.cbPuertoPulsador.TabIndex = 69;
+            this.cbPuertoPulsador.Text = "COM1";
+            // 
+            // btConectarPulsador
+            // 
+            this.btConectarPulsador.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btConectarPulsador.Location = new System.Drawing.Point(204, 43);
+            this.btConectarPulsador.Name = "btConectarPulsador";
+            this.btConectarPulsador.Size = new System.Drawing.Size(108, 28);
+            this.btConectarPulsador.TabIndex = 70;
+            this.btConectarPulsador.Text = "Conect.Pulsador";
+            this.btConectarPulsador.UseVisualStyleBackColor = true;
+            this.btConectarPulsador.Click += new System.EventHandler(this.btConectarPulsador_Click);
+            // 
+            // btDesconectarPulsador
+            // 
+            this.btDesconectarPulsador.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btDesconectarPulsador.Location = new System.Drawing.Point(319, 43);
+            this.btDesconectarPulsador.Name = "btDesconectarPulsador";
+            this.btDesconectarPulsador.Size = new System.Drawing.Size(92, 28);
+            this.btDesconectarPulsador.TabIndex = 71;
+            this.btDesconectarPulsador.Text = "Desconectar";
+            this.btDesconectarPulsador.UseVisualStyleBackColor = true;
+            this.btDesconectarPulsador.Click += new System.EventHandler(this.btDesconectarPulsador_Click);
+            // 
+            // tmrLeerDatosArduinoPulsador
+            // 
+            this.tmrLeerDatosArduinoPulsador.Interval = 50;
+            this.tmrLeerDatosArduinoPulsador.Tick += new System.EventHandler(this.tmrLeerDatosArduinoPulsador_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(895, 497);
+            this.Controls.Add(this.btDesconectarPulsador);
+            this.Controls.Add(this.btConectarPulsador);
+            this.Controls.Add(this.cbPuertoPulsador);
+            this.Controls.Add(this.label20);
+            this.Controls.Add(this.chkPulsador);
             this.Controls.Add(this.lblBoton1);
             this.Controls.Add(this.lblBoton2);
             this.Controls.Add(this.chkInvertirBotones);
@@ -923,8 +1023,10 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbPuerto);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "MEIGA Config - Módulo Espacial de Integración de Giróscopo y Acelerómetro";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1001,6 +1103,12 @@
         private System.Windows.Forms.CheckBox chkInvertirBotones;
         private System.Windows.Forms.Label lblBoton2;
         private System.Windows.Forms.Label lblBoton1;
+        private System.Windows.Forms.CheckBox chkPulsador;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.ComboBox cbPuertoPulsador;
+        private System.Windows.Forms.Button btConectarPulsador;
+        private System.Windows.Forms.Button btDesconectarPulsador;
+        private System.Windows.Forms.Timer tmrLeerDatosArduinoPulsador;
     }
 }
 

@@ -49,13 +49,13 @@ float CORRECION_ALABEO_DER =      1.2;
 int TIEMPO_MIN_SCROLL =         200;
 int CFG_MODO =                  0;
 int  DIRECCION =                1;
-int  PULSACION =                1;
-int  SCROLL =                   1;
+int  PULSACION =                0;
+int  SCROLL =                   0;
 int  MOVIMIENTO =               1;
-int  CLIC_MEDIO =               1;
-int  CLIC_DER =                 1;
-int  CLIC_IZQ =                 1;
-int  ACCIONES =                 1;
+int  CLIC_MEDIO =               0;
+int  CLIC_DER =                 0;
+int  CLIC_IZQ =                 0;
+int  ACCIONES =                 0;
 
 //***********************************************
 
@@ -139,6 +139,9 @@ void setup(void)
 {
   int CodIni =0;
   DEBUG = 1;
+
+  bleMouse.begin();
+
   EEPROM.begin(EEPROM_SIZE);
 
   CodIni = EEPROM.read(0);
@@ -146,8 +149,6 @@ void setup(void)
 
   DefinirAcciones();
   Serial.begin(115200);
-  while (!Serial)
-    delay(10); // will pause Zero, Leonardo, etc until serial console opens
 
   Serial.println("Adafruit MPU6050 test!");
 
@@ -176,7 +177,6 @@ void setup(void)
 
   MeigaActivo = false;
 
-  bleMouse.begin();
 }
 
 //************************************************  LOOP  ***************************************************************
@@ -642,7 +642,8 @@ void Circunferencia(int cx, int cy, int r, int ms, float ang_ini, float ang_fin,
     y = cy+r*sin(ang);
 
     if ((x != ant_x) || (y != ant_y))
-      bleMouse.move(x-ant_x, y-ant_y);
+      if (bleMouse.isConnected())
+        bleMouse.move(x-ant_x, y-ant_y);
     
     ant_x=x;
     ant_y=y;
@@ -783,19 +784,23 @@ Serial.println("END;.");
 
 void MoverRaton(signed char x, signed char y)
  {
-      if (MOVIMIENTO == 1) bleMouse.move(x,y);
+      if (bleMouse.isConnected())
+        if (MOVIMIENTO == 1) bleMouse.move(x,y);
  }
  void ScrollRaton(signed char s) 
  {
-      if (SCROLL) bleMouse.move(0,0,s);
+      if (bleMouse.isConnected())
+        if (SCROLL) bleMouse.move(0,0,s);
  }
 
  void PulsarRaton(uint8_t boton)
  {
+      if (bleMouse.isConnected())
         if (PULSACION) bleMouse.press(boton);
  }
  void LiberarRaton(uint8_t boton)
  {
+      if (bleMouse.isConnected())
         if (PULSACION) bleMouse.release(boton);
  }
  void ClicRaton(uint8_t boton)
@@ -804,17 +809,20 @@ void MoverRaton(signed char x, signed char y)
     {
       case MOUSE_MIDDLE:
       {
-        if (CLIC_MEDIO) bleMouse.click(boton);
+        if (bleMouse.isConnected())
+          if (CLIC_MEDIO) bleMouse.click(boton);
         break;
       }
       case MOUSE_LEFT:
       {
-        if (CLIC_IZQ) bleMouse.click(boton);
+        if (bleMouse.isConnected())
+          if (CLIC_IZQ) bleMouse.click(boton);
         break;
       }
       case MOUSE_RIGHT:
       {
-        if (CLIC_DER) bleMouse.click(boton);
+        if (bleMouse.isConnected())
+          if (CLIC_DER) bleMouse.click(boton);
         break;
       }
     }

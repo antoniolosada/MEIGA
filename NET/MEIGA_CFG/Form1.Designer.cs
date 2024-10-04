@@ -81,31 +81,34 @@
             this.label17 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
-            this.chkPulsacion = new System.Windows.Forms.CheckBox();
-            this.chkScroll = new System.Windows.Forms.CheckBox();
-            this.chkDireccion = new System.Windows.Forms.CheckBox();
             this.lblMEjilla = new System.Windows.Forms.Label();
             this.lblAlabeoNeg = new System.Windows.Forms.Label();
             this.lblAlabeoPos = new System.Windows.Forms.Label();
-            this.chkMovimiento = new System.Windows.Forms.CheckBox();
-            this.chkClicIzq = new System.Windows.Forms.CheckBox();
-            this.chkClicDer = new System.Windows.Forms.CheckBox();
-            this.chkClicCentro = new System.Windows.Forms.CheckBox();
             this.btLeerCfg = new System.Windows.Forms.Button();
-            this.chkAcciones = new System.Windows.Forms.CheckBox();
             this.btSCAN = new System.Windows.Forms.Button();
             this.tmrEsperaCierrePuerto = new System.Windows.Forms.Timer(this.components);
-            this.chkInvertirBotones = new System.Windows.Forms.CheckBox();
             this.lblBoton2 = new System.Windows.Forms.Label();
             this.lblBoton1 = new System.Windows.Forms.Label();
-            this.chkPulsador = new System.Windows.Forms.CheckBox();
             this.label20 = new System.Windows.Forms.Label();
             this.cbPuertoPulsador = new System.Windows.Forms.ComboBox();
             this.btConectarPulsador = new System.Windows.Forms.Button();
             this.btDesconectarPulsador = new System.Windows.Forms.Button();
             this.tmrLeerDatosArduinoPulsador = new System.Windows.Forms.Timer(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkPulsador = new System.Windows.Forms.CheckBox();
+            this.chkInvertirBotones = new System.Windows.Forms.CheckBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.chkAcciones = new System.Windows.Forms.CheckBox();
+            this.chkClicCentro = new System.Windows.Forms.CheckBox();
+            this.chkClicDer = new System.Windows.Forms.CheckBox();
+            this.chkClicIzq = new System.Windows.Forms.CheckBox();
+            this.chkMovimiento = new System.Windows.Forms.CheckBox();
+            this.chkDireccion = new System.Windows.Forms.CheckBox();
+            this.chkScroll = new System.Windows.Forms.CheckBox();
+            this.chkPulsacion = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // cbPuerto
@@ -391,9 +394,9 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(145, 256);
+            this.pictureBox1.Location = new System.Drawing.Point(204, 256);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(333, 191);
+            this.pictureBox1.Size = new System.Drawing.Size(274, 191);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 25;
             this.pictureBox1.TabStop = false;
@@ -658,48 +661,6 @@
             this.label19.TabIndex = 50;
             this.label19.Text = "Tiempo Min. Scroll";
             // 
-            // chkPulsacion
-            // 
-            this.chkPulsacion.AutoSize = true;
-            this.chkPulsacion.Checked = true;
-            this.chkPulsacion.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkPulsacion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkPulsacion.Location = new System.Drawing.Point(511, 410);
-            this.chkPulsacion.Margin = new System.Windows.Forms.Padding(2);
-            this.chkPulsacion.Name = "chkPulsacion";
-            this.chkPulsacion.Size = new System.Drawing.Size(96, 24);
-            this.chkPulsacion.TabIndex = 51;
-            this.chkPulsacion.Text = "Pulsación";
-            this.chkPulsacion.UseVisualStyleBackColor = true;
-            // 
-            // chkScroll
-            // 
-            this.chkScroll.AutoSize = true;
-            this.chkScroll.Checked = true;
-            this.chkScroll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkScroll.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkScroll.Location = new System.Drawing.Point(511, 291);
-            this.chkScroll.Margin = new System.Windows.Forms.Padding(2);
-            this.chkScroll.Name = "chkScroll";
-            this.chkScroll.Size = new System.Drawing.Size(67, 24);
-            this.chkScroll.TabIndex = 52;
-            this.chkScroll.Text = "Scroll";
-            this.chkScroll.UseVisualStyleBackColor = true;
-            // 
-            // chkDireccion
-            // 
-            this.chkDireccion.AutoSize = true;
-            this.chkDireccion.Checked = true;
-            this.chkDireccion.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDireccion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkDireccion.Location = new System.Drawing.Point(511, 316);
-            this.chkDireccion.Margin = new System.Windows.Forms.Padding(2);
-            this.chkDireccion.Name = "chkDireccion";
-            this.chkDireccion.Size = new System.Drawing.Size(94, 24);
-            this.chkDireccion.TabIndex = 53;
-            this.chkDireccion.Text = "Dirección";
-            this.chkDireccion.UseVisualStyleBackColor = true;
-            // 
             // lblMEjilla
             // 
             this.lblMEjilla.BackColor = System.Drawing.Color.Yellow;
@@ -730,62 +691,6 @@
             this.lblAlabeoPos.Size = new System.Drawing.Size(25, 22);
             this.lblAlabeoPos.TabIndex = 56;
             // 
-            // chkMovimiento
-            // 
-            this.chkMovimiento.AutoSize = true;
-            this.chkMovimiento.Checked = true;
-            this.chkMovimiento.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkMovimiento.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkMovimiento.Location = new System.Drawing.Point(511, 268);
-            this.chkMovimiento.Margin = new System.Windows.Forms.Padding(2);
-            this.chkMovimiento.Name = "chkMovimiento";
-            this.chkMovimiento.Size = new System.Drawing.Size(108, 24);
-            this.chkMovimiento.TabIndex = 57;
-            this.chkMovimiento.Text = "Movimiento";
-            this.chkMovimiento.UseVisualStyleBackColor = true;
-            // 
-            // chkClicIzq
-            // 
-            this.chkClicIzq.AutoSize = true;
-            this.chkClicIzq.Checked = true;
-            this.chkClicIzq.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkClicIzq.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkClicIzq.Location = new System.Drawing.Point(511, 341);
-            this.chkClicIzq.Margin = new System.Windows.Forms.Padding(2);
-            this.chkClicIzq.Name = "chkClicIzq";
-            this.chkClicIzq.Size = new System.Drawing.Size(74, 24);
-            this.chkClicIzq.TabIndex = 58;
-            this.chkClicIzq.Text = "clic izq";
-            this.chkClicIzq.UseVisualStyleBackColor = true;
-            // 
-            // chkClicDer
-            // 
-            this.chkClicDer.AutoSize = true;
-            this.chkClicDer.Checked = true;
-            this.chkClicDer.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkClicDer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkClicDer.Location = new System.Drawing.Point(511, 364);
-            this.chkClicDer.Margin = new System.Windows.Forms.Padding(2);
-            this.chkClicDer.Name = "chkClicDer";
-            this.chkClicDer.Size = new System.Drawing.Size(77, 24);
-            this.chkClicDer.TabIndex = 59;
-            this.chkClicDer.Text = "clic der";
-            this.chkClicDer.UseVisualStyleBackColor = true;
-            // 
-            // chkClicCentro
-            // 
-            this.chkClicCentro.AutoSize = true;
-            this.chkClicCentro.Checked = true;
-            this.chkClicCentro.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkClicCentro.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkClicCentro.Location = new System.Drawing.Point(511, 385);
-            this.chkClicCentro.Margin = new System.Windows.Forms.Padding(2);
-            this.chkClicCentro.Name = "chkClicCentro";
-            this.chkClicCentro.Size = new System.Drawing.Size(99, 24);
-            this.chkClicCentro.TabIndex = 60;
-            this.chkClicCentro.Text = "clic centro";
-            this.chkClicCentro.UseVisualStyleBackColor = true;
-            // 
             // btLeerCfg
             // 
             this.btLeerCfg.Enabled = false;
@@ -797,26 +702,12 @@
             this.btLeerCfg.UseVisualStyleBackColor = true;
             this.btLeerCfg.Click += new System.EventHandler(this.btLeerCfg_Click);
             // 
-            // chkAcciones
-            // 
-            this.chkAcciones.AutoSize = true;
-            this.chkAcciones.Checked = true;
-            this.chkAcciones.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAcciones.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkAcciones.Location = new System.Drawing.Point(511, 435);
-            this.chkAcciones.Margin = new System.Windows.Forms.Padding(2);
-            this.chkAcciones.Name = "chkAcciones";
-            this.chkAcciones.Size = new System.Drawing.Size(93, 24);
-            this.chkAcciones.TabIndex = 62;
-            this.chkAcciones.Text = "Acciones";
-            this.chkAcciones.UseVisualStyleBackColor = true;
-            // 
             // btSCAN
             // 
             this.btSCAN.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btSCAN.Location = new System.Drawing.Point(39, 201);
             this.btSCAN.Name = "btSCAN";
-            this.btSCAN.Size = new System.Drawing.Size(98, 38);
+            this.btSCAN.Size = new System.Drawing.Size(98, 39);
             this.btSCAN.TabIndex = 63;
             this.btSCAN.Text = "SCAN";
             this.btSCAN.UseVisualStyleBackColor = true;
@@ -826,17 +717,6 @@
             // 
             this.tmrEsperaCierrePuerto.Interval = 2000;
             this.tmrEsperaCierrePuerto.Tick += new System.EventHandler(this.tmrEsperaCierrePuerto_Tick);
-            // 
-            // chkInvertirBotones
-            // 
-            this.chkInvertirBotones.AutoSize = true;
-            this.chkInvertirBotones.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkInvertirBotones.Location = new System.Drawing.Point(511, 246);
-            this.chkInvertirBotones.Name = "chkInvertirBotones";
-            this.chkInvertirBotones.Size = new System.Drawing.Size(140, 24);
-            this.chkInvertirBotones.TabIndex = 64;
-            this.chkInvertirBotones.Text = "Invertir Botones";
-            this.chkInvertirBotones.UseVisualStyleBackColor = true;
             // 
             // lblBoton2
             // 
@@ -857,17 +737,6 @@
             this.lblBoton1.Name = "lblBoton1";
             this.lblBoton1.Size = new System.Drawing.Size(25, 25);
             this.lblBoton1.TabIndex = 66;
-            // 
-            // chkPulsador
-            // 
-            this.chkPulsador.AutoSize = true;
-            this.chkPulsador.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkPulsador.Location = new System.Drawing.Point(40, 264);
-            this.chkPulsador.Name = "chkPulsador";
-            this.chkPulsador.Size = new System.Drawing.Size(98, 24);
-            this.chkPulsador.TabIndex = 67;
-            this.chkPulsador.Text = "Pulsar/clic";
-            this.chkPulsador.UseVisualStyleBackColor = true;
             // 
             // label20
             // 
@@ -949,40 +818,184 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Location = new System.Drawing.Point(26, 300);
+            this.groupBox1.Controls.Add(this.chkInvertirBotones);
+            this.groupBox1.Controls.Add(this.chkPulsador);
+            this.groupBox1.Location = new System.Drawing.Point(39, 246);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 100);
+            this.groupBox1.Size = new System.Drawing.Size(153, 209);
             this.groupBox1.TabIndex = 72;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.groupBox1.Text = "Pulsador";
+            // 
+            // chkPulsador
+            // 
+            this.chkPulsador.AutoSize = true;
+            this.chkPulsador.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkPulsador.Location = new System.Drawing.Point(6, 19);
+            this.chkPulsador.Name = "chkPulsador";
+            this.chkPulsador.Size = new System.Drawing.Size(98, 24);
+            this.chkPulsador.TabIndex = 68;
+            this.chkPulsador.Text = "Pulsar/clic";
+            this.chkPulsador.UseVisualStyleBackColor = true;
+            // 
+            // chkInvertirBotones
+            // 
+            this.chkInvertirBotones.AutoSize = true;
+            this.chkInvertirBotones.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkInvertirBotones.Location = new System.Drawing.Point(6, 41);
+            this.chkInvertirBotones.Name = "chkInvertirBotones";
+            this.chkInvertirBotones.Size = new System.Drawing.Size(140, 24);
+            this.chkInvertirBotones.TabIndex = 69;
+            this.chkInvertirBotones.Text = "Invertir Botones";
+            this.chkInvertirBotones.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.chkAcciones);
+            this.groupBox2.Controls.Add(this.chkClicCentro);
+            this.groupBox2.Controls.Add(this.chkClicDer);
+            this.groupBox2.Controls.Add(this.chkClicIzq);
+            this.groupBox2.Controls.Add(this.chkMovimiento);
+            this.groupBox2.Controls.Add(this.chkDireccion);
+            this.groupBox2.Controls.Add(this.chkScroll);
+            this.groupBox2.Controls.Add(this.chkPulsacion);
+            this.groupBox2.Location = new System.Drawing.Point(487, 246);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(122, 211);
+            this.groupBox2.TabIndex = 73;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Meiga";
+            // 
+            // chkAcciones
+            // 
+            this.chkAcciones.AutoSize = true;
+            this.chkAcciones.Checked = true;
+            this.chkAcciones.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAcciones.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkAcciones.Location = new System.Drawing.Point(5, 185);
+            this.chkAcciones.Margin = new System.Windows.Forms.Padding(2);
+            this.chkAcciones.Name = "chkAcciones";
+            this.chkAcciones.Size = new System.Drawing.Size(93, 24);
+            this.chkAcciones.TabIndex = 70;
+            this.chkAcciones.Text = "Acciones";
+            this.chkAcciones.UseVisualStyleBackColor = true;
+            // 
+            // chkClicCentro
+            // 
+            this.chkClicCentro.AutoSize = true;
+            this.chkClicCentro.Checked = true;
+            this.chkClicCentro.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkClicCentro.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkClicCentro.Location = new System.Drawing.Point(5, 135);
+            this.chkClicCentro.Margin = new System.Windows.Forms.Padding(2);
+            this.chkClicCentro.Name = "chkClicCentro";
+            this.chkClicCentro.Size = new System.Drawing.Size(99, 24);
+            this.chkClicCentro.TabIndex = 69;
+            this.chkClicCentro.Text = "clic centro";
+            this.chkClicCentro.UseVisualStyleBackColor = true;
+            // 
+            // chkClicDer
+            // 
+            this.chkClicDer.AutoSize = true;
+            this.chkClicDer.Checked = true;
+            this.chkClicDer.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkClicDer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkClicDer.Location = new System.Drawing.Point(5, 114);
+            this.chkClicDer.Margin = new System.Windows.Forms.Padding(2);
+            this.chkClicDer.Name = "chkClicDer";
+            this.chkClicDer.Size = new System.Drawing.Size(77, 24);
+            this.chkClicDer.TabIndex = 68;
+            this.chkClicDer.Text = "clic der";
+            this.chkClicDer.UseVisualStyleBackColor = true;
+            // 
+            // chkClicIzq
+            // 
+            this.chkClicIzq.AutoSize = true;
+            this.chkClicIzq.Checked = true;
+            this.chkClicIzq.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkClicIzq.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkClicIzq.Location = new System.Drawing.Point(5, 91);
+            this.chkClicIzq.Margin = new System.Windows.Forms.Padding(2);
+            this.chkClicIzq.Name = "chkClicIzq";
+            this.chkClicIzq.Size = new System.Drawing.Size(74, 24);
+            this.chkClicIzq.TabIndex = 67;
+            this.chkClicIzq.Text = "clic izq";
+            this.chkClicIzq.UseVisualStyleBackColor = true;
+            // 
+            // chkMovimiento
+            // 
+            this.chkMovimiento.AutoSize = true;
+            this.chkMovimiento.Checked = true;
+            this.chkMovimiento.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkMovimiento.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkMovimiento.Location = new System.Drawing.Point(5, 18);
+            this.chkMovimiento.Margin = new System.Windows.Forms.Padding(2);
+            this.chkMovimiento.Name = "chkMovimiento";
+            this.chkMovimiento.Size = new System.Drawing.Size(108, 24);
+            this.chkMovimiento.TabIndex = 66;
+            this.chkMovimiento.Text = "Movimiento";
+            this.chkMovimiento.UseVisualStyleBackColor = true;
+            // 
+            // chkDireccion
+            // 
+            this.chkDireccion.AutoSize = true;
+            this.chkDireccion.Checked = true;
+            this.chkDireccion.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDireccion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkDireccion.Location = new System.Drawing.Point(5, 66);
+            this.chkDireccion.Margin = new System.Windows.Forms.Padding(2);
+            this.chkDireccion.Name = "chkDireccion";
+            this.chkDireccion.Size = new System.Drawing.Size(94, 24);
+            this.chkDireccion.TabIndex = 65;
+            this.chkDireccion.Text = "Dirección";
+            this.chkDireccion.UseVisualStyleBackColor = true;
+            // 
+            // chkScroll
+            // 
+            this.chkScroll.AutoSize = true;
+            this.chkScroll.Checked = true;
+            this.chkScroll.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkScroll.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkScroll.Location = new System.Drawing.Point(5, 41);
+            this.chkScroll.Margin = new System.Windows.Forms.Padding(2);
+            this.chkScroll.Name = "chkScroll";
+            this.chkScroll.Size = new System.Drawing.Size(67, 24);
+            this.chkScroll.TabIndex = 64;
+            this.chkScroll.Text = "Scroll";
+            this.chkScroll.UseVisualStyleBackColor = true;
+            // 
+            // chkPulsacion
+            // 
+            this.chkPulsacion.AutoSize = true;
+            this.chkPulsacion.Checked = true;
+            this.chkPulsacion.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkPulsacion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkPulsacion.Location = new System.Drawing.Point(5, 160);
+            this.chkPulsacion.Margin = new System.Windows.Forms.Padding(2);
+            this.chkPulsacion.Name = "chkPulsacion";
+            this.chkPulsacion.Size = new System.Drawing.Size(96, 24);
+            this.chkPulsacion.TabIndex = 63;
+            this.chkPulsacion.Text = "Pulsación";
+            this.chkPulsacion.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(895, 497);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btDesconectarPulsador);
             this.Controls.Add(this.btConectarPulsador);
             this.Controls.Add(this.cbPuertoPulsador);
             this.Controls.Add(this.label20);
-            this.Controls.Add(this.chkPulsador);
             this.Controls.Add(this.lblBoton1);
             this.Controls.Add(this.lblBoton2);
-            this.Controls.Add(this.chkInvertirBotones);
             this.Controls.Add(this.btSCAN);
-            this.Controls.Add(this.chkAcciones);
             this.Controls.Add(this.btLeerCfg);
-            this.Controls.Add(this.chkClicCentro);
-            this.Controls.Add(this.chkClicDer);
-            this.Controls.Add(this.chkClicIzq);
-            this.Controls.Add(this.chkMovimiento);
             this.Controls.Add(this.lblAlabeoPos);
             this.Controls.Add(this.lblAlabeoNeg);
             this.Controls.Add(this.lblMEjilla);
-            this.Controls.Add(this.chkDireccion);
-            this.Controls.Add(this.chkScroll);
-            this.Controls.Add(this.chkPulsacion);
             this.Controls.Add(this.label19);
             this.Controls.Add(this.label18);
             this.Controls.Add(this.label17);
@@ -1037,8 +1050,13 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "MEIGA Config - Módulo Espacial de Integración de Giróscopo y Acelerómetro";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1097,30 +1115,31 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.CheckBox chkPulsacion;
-        private System.Windows.Forms.CheckBox chkScroll;
-        private System.Windows.Forms.CheckBox chkDireccion;
         private System.Windows.Forms.Label lblMEjilla;
         private System.Windows.Forms.Label lblAlabeoNeg;
         private System.Windows.Forms.Label lblAlabeoPos;
-        private System.Windows.Forms.CheckBox chkMovimiento;
-        private System.Windows.Forms.CheckBox chkClicIzq;
-        private System.Windows.Forms.CheckBox chkClicDer;
-        private System.Windows.Forms.CheckBox chkClicCentro;
         private System.Windows.Forms.Button btLeerCfg;
-        private System.Windows.Forms.CheckBox chkAcciones;
         private System.Windows.Forms.Button btSCAN;
         private System.Windows.Forms.Timer tmrEsperaCierrePuerto;
-        private System.Windows.Forms.CheckBox chkInvertirBotones;
         private System.Windows.Forms.Label lblBoton2;
         private System.Windows.Forms.Label lblBoton1;
-        private System.Windows.Forms.CheckBox chkPulsador;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.ComboBox cbPuertoPulsador;
         private System.Windows.Forms.Button btConectarPulsador;
         private System.Windows.Forms.Button btDesconectarPulsador;
         private System.Windows.Forms.Timer tmrLeerDatosArduinoPulsador;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox chkPulsador;
+        private System.Windows.Forms.CheckBox chkInvertirBotones;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.CheckBox chkAcciones;
+        private System.Windows.Forms.CheckBox chkClicCentro;
+        private System.Windows.Forms.CheckBox chkClicDer;
+        private System.Windows.Forms.CheckBox chkClicIzq;
+        private System.Windows.Forms.CheckBox chkMovimiento;
+        private System.Windows.Forms.CheckBox chkDireccion;
+        private System.Windows.Forms.CheckBox chkScroll;
+        private System.Windows.Forms.CheckBox chkPulsacion;
     }
 }
 

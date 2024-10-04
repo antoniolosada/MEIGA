@@ -70,6 +70,9 @@ namespace MEIGA_CFG
         static string sPuertoMEIGA = "";
         static string sPuertoPulsador = "";
         Cursor Raton;
+        public NotifyIcon trayIcon;
+        private ContextMenu trayMenu;
+        bool Salir = false;
 
         public Form1()
         {
@@ -172,6 +175,9 @@ namespace MEIGA_CFG
         private void ProcesarComando(string Comando)
         {
             string Valor = "";
+            if (Comando.Length <= 4) return;
+            if (Comando.Substring(0,1) != "@") return;
+
             if (Comando.Substring(0, 3) == "@#P")
             {
                 string comando = Comando.Substring(3);
@@ -750,6 +756,41 @@ namespace MEIGA_CFG
         {
             cbPuerto.Text = ConfigurationManager.AppSettings["PuertoMeiga"];
             cbPuertoPulsador.Text = ConfigurationManager.AppSettings["PuertoPulsador"];
+            SysTrayApp();
+        }
+        public void SysTrayApp()
+        {
+            // Create a simple tray menu with only one item.
+            trayMenu = new ContextMenu();
+            trayMenu.MenuItems.Add("Salir", OnExit);
+            trayMenu.MenuItems.Add("Mostrar", OnShow);
+
+            // Create a tray icon. In this example we use a
+            // standard system icon for simplicity, but you
+            // can of course use your own custom icon too.
+            trayIcon = new NotifyIcon();
+            trayIcon.Text = "XULIA";
+            trayIcon.Icon = new Icon(Application.StartupPath + @"\Iconos\activa.ico", 40, 40);
+
+            // Add menu to tray icon and show it.
+            trayIcon.ContextMenu = trayMenu;
+            trayIcon.Visible = true;
+        }
+        private void OnExit(object sender, EventArgs e)
+        {
+            trayIcon.Dispose();
+            Salir = true;
+            Application.Exit();
+        }
+        private void OnShow(object sender, EventArgs e)
+        {
+            this.Show();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!Salir) e.Cancel = true;
+            this.Hide();
         }
     }
 

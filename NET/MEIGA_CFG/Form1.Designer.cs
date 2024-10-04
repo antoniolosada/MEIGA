@@ -104,6 +104,7 @@
             this.btConectarPulsador = new System.Windows.Forms.Button();
             this.btDesconectarPulsador = new System.Windows.Forms.Button();
             this.tmrLeerDatosArduinoPulsador = new System.Windows.Forms.Timer(this.components);
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -946,11 +947,21 @@
             this.tmrLeerDatosArduinoPulsador.Interval = 50;
             this.tmrLeerDatosArduinoPulsador.Tick += new System.EventHandler(this.tmrLeerDatosArduinoPulsador_Tick);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Location = new System.Drawing.Point(26, 316);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(200, 100);
+            this.groupBox1.TabIndex = 72;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "groupBox1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(895, 497);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btDesconectarPulsador);
             this.Controls.Add(this.btConectarPulsador);
             this.Controls.Add(this.cbPuertoPulsador);
@@ -1109,6 +1120,7 @@
         private System.Windows.Forms.Button btConectarPulsador;
         private System.Windows.Forms.Button btDesconectarPulsador;
         private System.Windows.Forms.Timer tmrLeerDatosArduinoPulsador;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 

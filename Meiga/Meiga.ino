@@ -52,9 +52,9 @@ int  DIRECCION =                -1;
 int  PULSACION =                0;
 int  SCROLL =                   0;
 int  MOVIMIENTO =               1;
-int  CLIC_MEDIO =               0;
-int  CLIC_DER =                 0;
-int  CLIC_IZQ =                 0;
+int  CLIC_MEDIO =               1;
+int  CLIC_DER =                 1;
+int  CLIC_IZQ =                 1;
 int  ACCIONES =                 0;
 
 //***********************************************
@@ -143,8 +143,8 @@ void setup(void)
   bleMouse.begin();
 
   EEPROM.begin(EEPROM_SIZE);
-
-  CodIni = EEPROM.read(0);
+ 
+  CodIni = EEPROM.readShort(0);
   if (CodIni == (int)COD_INI) LeerConfiguracion();
 
   DefinirAcciones();

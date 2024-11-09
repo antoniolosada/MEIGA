@@ -95,8 +95,8 @@
             this.btDesconectarPulsador = new System.Windows.Forms.Button();
             this.tmrLeerDatosArduinoPulsador = new System.Windows.Forms.Timer(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.chkPulsador = new System.Windows.Forms.CheckBox();
             this.chkInvertirBotones = new System.Windows.Forms.CheckBox();
+            this.chkPulsador = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.chkAcciones = new System.Windows.Forms.CheckBox();
             this.chkClicCentro = new System.Windows.Forms.CheckBox();
@@ -504,6 +504,7 @@
             this.tbAlabeoMinNeg.TabIndex = 35;
             this.tbAlabeoMinNeg.Text = "-2,5";
             this.tbAlabeoMinNeg.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tbAlabeoMinNeg.TextChanged += new System.EventHandler(this.tbAlabeoMinNeg_TextChanged);
             this.tbAlabeoMinNeg.Validating += new System.ComponentModel.CancelEventHandler(this.tbMultiplicadorX_Validating_1);
             // 
             // tbAlabeoMaxNeg
@@ -827,17 +828,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Pulsador";
             // 
-            // chkPulsador
-            // 
-            this.chkPulsador.AutoSize = true;
-            this.chkPulsador.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkPulsador.Location = new System.Drawing.Point(6, 19);
-            this.chkPulsador.Name = "chkPulsador";
-            this.chkPulsador.Size = new System.Drawing.Size(98, 24);
-            this.chkPulsador.TabIndex = 68;
-            this.chkPulsador.Text = "Pulsar/clic";
-            this.chkPulsador.UseVisualStyleBackColor = true;
-            // 
             // chkInvertirBotones
             // 
             this.chkInvertirBotones.AutoSize = true;
@@ -848,6 +838,17 @@
             this.chkInvertirBotones.TabIndex = 69;
             this.chkInvertirBotones.Text = "Invertir Botones";
             this.chkInvertirBotones.UseVisualStyleBackColor = true;
+            // 
+            // chkPulsador
+            // 
+            this.chkPulsador.AutoSize = true;
+            this.chkPulsador.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkPulsador.Location = new System.Drawing.Point(6, 19);
+            this.chkPulsador.Name = "chkPulsador";
+            this.chkPulsador.Size = new System.Drawing.Size(98, 24);
+            this.chkPulsador.TabIndex = 68;
+            this.chkPulsador.Text = "Pulsar/clic";
+            this.chkPulsador.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 

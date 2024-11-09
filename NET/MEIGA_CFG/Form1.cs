@@ -176,7 +176,7 @@ namespace MEIGA_CFG
         {
             string Valor = "";
             if (Comando.Length <= 4) return;
-            if (Comando.Substring(0,1) != "@") return;
+            //if (Comando.Substring(0,1) != "@") return;
 
             if (Comando.Substring(0, 3) == "@#P")
             {
@@ -419,11 +419,13 @@ namespace MEIGA_CFG
                 Console.WriteLine(("EscribirComCRC: " + ex.Message));
             }
         }
-        private bool ComprobarCampo(string c)
+        private bool ComprobarCampo(string cadena1)
         {
-            string CarValidos = "1234567890-,";
+            string cadena2 = "1234567890-,";
 
-            if (c.Intersect(CarValidos).Count() != c.Length)
+            var caracteresNoEncontrados = cadena1.Where(c => !cadena2.Contains(c)).ToList();
+
+            if (caracteresNoEncontrados.Any())
                 return false;
             else
                 return true;
@@ -468,6 +470,7 @@ namespace MEIGA_CFG
             Thread.Sleep(1000);
             for (int i = 0; i < 300; i++) Thread.Yield();
             TextoCom = "";
+            DesactivarCampos(false);
         }
 
         private void btReiniciar_Click(object sender, EventArgs e)
@@ -514,6 +517,7 @@ namespace MEIGA_CFG
             Thread.Sleep(1000);
             for (int i = 0; i < 300; i++) Thread.Yield();
             TextoCom = "";
+            DesactivarCampos(true);
         }
         private void LeerConfiguracion(string Comando)
         {
@@ -585,7 +589,7 @@ namespace MEIGA_CFG
         {
             if (!ComprobarCampo(((System.Windows.Forms.TextBox)sender).Text))
             {
-                MessageBox.Show("Sólo se permiten números, coma y signo negativo. Debe configurarse la como como separador decimal.");
+                MessageBox.Show("Sólo se permiten números, coma y signo negativo. Debe configurarse la coma como separador decimal.");
                 e.Cancel = true;
             }
         }
@@ -791,6 +795,11 @@ namespace MEIGA_CFG
         {
             if (!Salir) e.Cancel = true;
             this.Hide();
+        }
+
+        private void tbAlabeoMinNeg_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 

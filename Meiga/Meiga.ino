@@ -280,70 +280,66 @@ void ControlRaton()
   int MovY = deltaY/deltaMs*MultiploY;
 
   if(!bleMouse.isConnected()) 
-  {
-      SalidaMovRaton(MovX, -MovY);
-  }
+    SalidaMovRaton(MovX, -MovY);
   else
-  {
     MoverRaton(MovX*DIRECCION, -MovY);
 
-    if (AlabeoActivo())
+  if (AlabeoActivo())
+  {
+    if (TiempoAlabeo)
     {
-      if (TiempoAlabeo)
+      if (millis() - TiempoAlabeo > TIEMPO_MIN_SCROLL)
       {
-        if (millis() - TiempoAlabeo > TIEMPO_MIN_SCROLL)
+        if (millis() - TiempoScroll > TIEMPO_SCROLL)
         {
-          if (millis() - TiempoScroll > TIEMPO_SCROLL)
-          {
-            if (filtroAlabeo > 0)
-              ScrollRaton(1);
-            else
-              ScrollRaton(-1);
-            TiempoScroll = millis();  
-          } else if (TiempoScroll == 0) TiempoScroll = millis();  
-        }
+          if (filtroAlabeo > 0)
+            ScrollRaton(1);
+          else
+            ScrollRaton(-1);
+          TiempoScroll = millis();  
+        } else if (TiempoScroll == 0) TiempoScroll = millis();  
       }
-      else TiempoAlabeo = millis();
     }
-    else 
-    {
-      TiempoAlabeo = 0;
-      TiempoScroll = 0;
-    }
+    else TiempoAlabeo = millis();
+  }
+  else 
+  {
+    TiempoAlabeo = 0;
+    TiempoScroll = 0;
+  }
 
 
-    long Tiempo = millis() - MsPulsacion;
-    if (abs(MejillaIni - Mejilla) > PULSACION_ADC)
+  long Tiempo = millis() - MsPulsacion;
+  if (abs(MejillaIni - Mejilla) > PULSACION_ADC)
+  {
+    if (MsPulsacion == 0)
+      MsPulsacion = millis();
+    else if (Tiempo > PULSACION_LARGA_MS)
     {
-      if (MsPulsacion == 0)
-        MsPulsacion = millis();
-      else if (Tiempo > PULSACION_LARGA_MS)
-      {
-        PulsarRaton(MOUSE_LEFT);
-        BotonDerPulsado = true;
+      PulsarRaton(MOUSE_LEFT);
+      BotonDerPulsado = true;
+    }
+  }
+  else 
+  {
+    if (BotonDerPulsado)
+    {
+      LiberarRaton(MOUSE_LEFT);
+      BotonDerPulsado = false;
+    }
+    else if (MsPulsacion)
+    {
+      if (Tiempo < PULSACION_CORTA_MS) {
+        ClicRaton(MOUSE_LEFT);
+      }
+      else if (Tiempo < PULSACION_MEDIA_MS){
+        ClicRaton(MOUSE_MIDDLE);
+      }
+      else {
+        ClicRaton(MOUSE_RIGHT);
       }
     }
-    else 
-    {
-      if (BotonDerPulsado)
-      {
-        LiberarRaton(MOUSE_LEFT);
-        BotonDerPulsado = false;
-      }
-      else if (MsPulsacion)
-      {
-        if (Tiempo < PULSACION_CORTA_MS) {
-          ClicRaton(MOUSE_LEFT);
-        }
-        else if (Tiempo < PULSACION_MEDIA_MS){
-          ClicRaton(MOUSE_MIDDLE);
-        }
-        else {
-          ClicRaton(MOUSE_RIGHT);
-        }
-      }
-      MsPulsacion = 0;
-    }
+    MsPulsacion = 0;
   }
 }
 
@@ -816,13 +812,21 @@ void MoverRaton(signed char x, signed char y)
       case MOUSE_LEFT:
       {
         if (bleMouse.isConnected())
+        {
           if (CLIC_IZQ) bleMouse.click(boton);
+        }
+        else
+          Serial.println("@LP:1,0;.");
         break;
       }
       case MOUSE_RIGHT:
       {
         if (bleMouse.isConnected())
+        {
           if (CLIC_DER) bleMouse.click(boton);
+        }
+        else
+          Serial.println("@LP:0,1;.");
         break;
       }
     }

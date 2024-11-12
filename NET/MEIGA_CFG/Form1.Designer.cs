@@ -106,6 +106,8 @@
             this.chkDireccion = new System.Windows.Forms.CheckBox();
             this.chkScroll = new System.Windows.Forms.CheckBox();
             this.chkPulsacion = new System.Windows.Forms.CheckBox();
+            this.btPrueba = new System.Windows.Forms.Button();
+            this.chkSegundoCursor = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -823,7 +825,7 @@
             this.groupBox1.Controls.Add(this.chkPulsador);
             this.groupBox1.Location = new System.Drawing.Point(39, 246);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(153, 209);
+            this.groupBox1.Size = new System.Drawing.Size(153, 77);
             this.groupBox1.TabIndex = 72;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Pulsador";
@@ -979,11 +981,35 @@
             this.chkPulsacion.Text = "Pulsación";
             this.chkPulsacion.UseVisualStyleBackColor = true;
             // 
+            // btPrueba
+            // 
+            this.btPrueba.Location = new System.Drawing.Point(425, 527);
+            this.btPrueba.Name = "btPrueba";
+            this.btPrueba.Size = new System.Drawing.Size(134, 56);
+            this.btPrueba.TabIndex = 74;
+            this.btPrueba.Text = "button1";
+            this.btPrueba.UseVisualStyleBackColor = true;
+            this.btPrueba.Click += new System.EventHandler(this.btPrueba_Click);
+            // 
+            // chkSegundoCursor
+            // 
+            this.chkSegundoCursor.AutoSize = true;
+            this.chkSegundoCursor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkSegundoCursor.Location = new System.Drawing.Point(45, 335);
+            this.chkSegundoCursor.Name = "chkSegundoCursor";
+            this.chkSegundoCursor.Size = new System.Drawing.Size(144, 24);
+            this.chkSegundoCursor.TabIndex = 75;
+            this.chkSegundoCursor.Text = "Segundo Cursor";
+            this.chkSegundoCursor.UseVisualStyleBackColor = true;
+            this.chkSegundoCursor.CheckedChanged += new System.EventHandler(this.chkSegundoCursor_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(895, 497);
+            this.ClientSize = new System.Drawing.Size(895, 601);
+            this.Controls.Add(this.chkSegundoCursor);
+            this.Controls.Add(this.btPrueba);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btDesconectarPulsador);
@@ -1141,6 +1167,8 @@
         private System.Windows.Forms.CheckBox chkDireccion;
         private System.Windows.Forms.CheckBox chkScroll;
         private System.Windows.Forms.CheckBox chkPulsacion;
+        private System.Windows.Forms.Button btPrueba;
+        private System.Windows.Forms.CheckBox chkSegundoCursor;
     }
 }
 

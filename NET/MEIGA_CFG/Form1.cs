@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Configuration;
+using System.Diagnostics.Eventing.Reader;
 
 namespace MEIGA_CFG
 {
@@ -73,6 +74,7 @@ namespace MEIGA_CFG
         public NotifyIcon trayIcon;
         private ContextMenu trayMenu;
         bool Salir = false;
+        frmCursor frmSegundoCursor = new frmCursor();
 
         public Form1()
         {
@@ -136,7 +138,7 @@ namespace MEIGA_CFG
                 cbPuerto.BackColor = Color.Red;
             }
         }
-
+        // EDIT: DataReceivedHandler
         private static void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort sp = (SerialPort)sender;
@@ -153,11 +155,15 @@ namespace MEIGA_CFG
                 {
                     if (Disp == DISP_MEIGA)
                     {
-                        if (UltimoComando.Length > 1)
-                            if (UltimoComando.Substring(0, 1) == "@")
+                        if (UltimoComando.Length > 2)
+                            //Si el ultimo comando es una pulsacion no se sobreescribe
+                            if ((UltimoComando.Substring(0, 3) == "@LP") || (UltimoComando.Substring(0, 3) == "@#C"))
+                            {
+                                TextoCom = "";
                                 return;
+                            }
                         UltimoComando = comando;
-                        TextoCom = "";
+                        //TextoCom = "";
                     }
                     else
                     {
@@ -172,11 +178,11 @@ namespace MEIGA_CFG
             } 
         }
 
+        static Point SegundoCursor = new Point(0,0);
         private void ProcesarComando(string Comando)
         {
             string Valor = "";
             if (Comando.Length <= 4) return;
-            //if (Comando.Substring(0,1) != "@") return;
 
             if (Comando.Substring(0, 3) == "@#P")
             {
@@ -186,16 +192,29 @@ namespace MEIGA_CFG
                 int x = int.Parse(comando.Substring(0, px));
                 int py = comando.IndexOf(';', px + 1);
                 int y = int.Parse(comando.Substring(px + 1, py - px - 1));
-                Point p = Cursor.Position;
+                Point p;
+                if (chkSegundoCursor.Checked)
+                    p = SegundoCursor;
+                else
+                    p = Cursor.Position;
                 p.X += x*2;
                 p.Y -= y*2;
-                Cursor.Position = p;
+                if (chkSegundoCursor.Checked)
+                {
+                    frmSegundoCursor.Posicion(p);
+                    SegundoCursor = p;
+                }
+                else
+                    Cursor.Position = p;
             }
             else if (Comando.Substring(0, 3) == "@LP")
             {
                 int p1, p2;
-                p1 = int.Parse(Comando.Substring(4, 1));
-                p2 = int.Parse(Comando.Substring(6, 1));
+                string sp1, sp2;
+                sp1 = Comando.Substring(4, 1);
+                sp2 = Comando.Substring(6, 1);
+                p1 = int.Parse(sp1);
+                p2 = int.Parse(sp2);
 
                 if ((Boton1 == 0) && (p1 == 1))
                 {
@@ -250,6 +269,12 @@ namespace MEIGA_CFG
 
                 Boton1 = p1;
                 Boton2 = p2;
+
+                if (chkSegundoCursor.Checked)
+                {
+                    Boton1 = 0;
+                    Boton2 = 0;
+                }
 
                 if (Boton1 == 1)
                     lblBoton1.BackColor = Color.LightGreen;
@@ -354,7 +379,7 @@ namespace MEIGA_CFG
                 lectura = "." + lectura;
                 pos = 1;
             } 
-            if (pos >=0)
+            if (pos > 0)
             {
                 comando = lectura.Substring(0, pos-1);
                 if (lectura.Length > pos + 1)
@@ -695,11 +720,25 @@ namespace MEIGA_CFG
         }
         public void sendMouseClickLeft()
         {
-            mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, (UIntPtr)0);
+            if (chkSegundoCursor.Checked)
+            {
+                frmSegundoCursor.Hide();
+                mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, (uint)SegundoCursor.X, (uint)SegundoCursor.Y, 0, (UIntPtr)0);
+                frmSegundoCursor.Show();
+            }
+            else
+                mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, (UIntPtr)0);
         }
         public void sendMouseClickRight()
         {
-            mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, (UIntPtr)0);
+            if (chkSegundoCursor.Checked)
+            {
+                frmSegundoCursor.Hide();
+                mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, (uint)SegundoCursor.X, (uint)SegundoCursor.Y, 0, (UIntPtr)0);
+                frmSegundoCursor.Show();
+            }
+            else
+                mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, (UIntPtr)0);
         }
         public void sendMousePressLeft()
         {
@@ -800,6 +839,19 @@ namespace MEIGA_CFG
         private void tbAlabeoMinNeg_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btPrueba_Click(object sender, EventArgs e)
+        {
+            frmSegundoCursor.Show();
+        }
+
+        private void chkSegundoCursor_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((CheckBox) sender).Checked) 
+                frmSegundoCursor.Show();
+            else
+                frmSegundoCursor.Hide();
         }
     }
 

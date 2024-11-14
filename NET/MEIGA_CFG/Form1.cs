@@ -50,6 +50,8 @@ namespace MEIGA_CFG
         const int MAX_MULTIPLICADOR = 10;
         const int MAX_PULSACION = 10000;
         const int MAX_TIEMPO_SCROLL = 2000;
+        int MaxX = 1920;
+        int MaxY = 1080;
 
         const int DISP_PULSADOR = 1;
         const int DISP_MEIGA = 0;
@@ -201,6 +203,12 @@ namespace MEIGA_CFG
                 p.Y -= y*2;
                 if (chkSegundoCursor.Checked)
                 {
+                    if (p.X < 0) p.X = 0;
+                    if (p.Y < 0) p.Y = 0;
+
+                    if (p.X > MaxX) p.X = MaxX;
+                    if (p.Y > MaxY) p.Y = MaxY;
+
                     frmSegundoCursor.Posicion(p);
                     SegundoCursor = p;
                 }
@@ -486,6 +494,7 @@ namespace MEIGA_CFG
             v += (chkClicDer.Checked ? "1" : "0") + ",";
             v += (chkClicIzq.Checked ? "1" : "0") + ",";
             v += (chkClicCentro.Checked ? "1" : "0") + ",";
+            v += (chkDobleClic.Checked ? "1" : "0") + ",";
             v += (chkAcciones.Checked ? "1" : "0") + ",";
             v += (cbCfgModo.SelectedIndex) + ","; 
 
@@ -567,8 +576,9 @@ namespace MEIGA_CFG
             chkClicDer.Checked = itob(var[16]);
             chkClicIzq.Checked = itob(var[17]);
             chkClicCentro.Checked = itob(var[18]);
-            chkAcciones.Checked = itob(var[19]);
-            cbCfgModo.SelectedIndex = int.Parse(var[20]);
+            chkDobleClic.Checked = itob(var[19]);
+            chkAcciones.Checked = itob(var[20]);
+            cbCfgModo.SelectedIndex = int.Parse(var[21]);
         }
         private string Coma2Punto(string c)
         {
@@ -722,9 +732,12 @@ namespace MEIGA_CFG
         {
             if (chkSegundoCursor.Checked)
             {
+                Point p = Cursor.Position;
+                Cursor.Position = SegundoCursor;
                 frmSegundoCursor.Hide();
-                mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, (uint)SegundoCursor.X, (uint)SegundoCursor.Y, 0, (UIntPtr)0);
+                mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, (UIntPtr)0);
                 frmSegundoCursor.Show();
+                Cursor.Position = p;
             }
             else
                 mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, (UIntPtr)0);
@@ -733,9 +746,12 @@ namespace MEIGA_CFG
         {
             if (chkSegundoCursor.Checked)
             {
+                Point p = Cursor.Position;
+                Cursor.Position = SegundoCursor;
                 frmSegundoCursor.Hide();
-                mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, (uint)SegundoCursor.X, (uint)SegundoCursor.Y, 0, (UIntPtr)0);
+                mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, (UIntPtr)0);
                 frmSegundoCursor.Show();
+                Cursor.Position = p;
             }
             else
                 mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, (uint)Cursor.Position.X, (uint)Cursor.Position.Y, 0, (UIntPtr)0);
@@ -799,6 +815,8 @@ namespace MEIGA_CFG
         {
             cbPuerto.Text = ConfigurationManager.AppSettings["PuertoMeiga"];
             cbPuertoPulsador.Text = ConfigurationManager.AppSettings["PuertoPulsador"];
+            MaxX = int.Parse(ConfigurationManager.AppSettings["MAX_X"]);
+            MaxY = int.Parse(ConfigurationManager.AppSettings["MAX_Y"]);
             SysTrayApp();
         }
         public void SysTrayApp()
@@ -807,12 +825,13 @@ namespace MEIGA_CFG
             trayMenu = new ContextMenu();
             trayMenu.MenuItems.Add("Salir", OnExit);
             trayMenu.MenuItems.Add("Mostrar", OnShow);
+            trayMenu.MenuItems.Add("Ocultar", OnHide);
 
             // Create a tray icon. In this example we use a
             // standard system icon for simplicity, but you
             // can of course use your own custom icon too.
             trayIcon = new NotifyIcon();
-            trayIcon.Text = "XULIA";
+            trayIcon.Text = "MEIGA";
             trayIcon.Icon = new Icon(Application.StartupPath + @"\Iconos\activa.ico", 40, 40);
 
             // Add menu to tray icon and show it.
@@ -828,6 +847,12 @@ namespace MEIGA_CFG
         private void OnShow(object sender, EventArgs e)
         {
             this.Show();
+            if (chkSegundoCursor.Checked) frmSegundoCursor.Show();
+        }
+        private void OnHide(object sender, EventArgs e)
+        {
+            this.Hide();
+            frmSegundoCursor.Hide();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)

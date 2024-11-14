@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,6 +13,10 @@ namespace MEIGA_CFG
 {
     public partial class frmCursor : Form
     {
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
         private Timer timer;
         private Image cursorImage;
 
@@ -43,7 +48,9 @@ namespace MEIGA_CFG
         public void Posicion(Point p)
         { 
             this.Location = p;
+            this.TopMost = true;
         }
+
         private void PintarCursor(object sender, PaintEventArgs e)
         {
             // Dibujar la imagen del cursor

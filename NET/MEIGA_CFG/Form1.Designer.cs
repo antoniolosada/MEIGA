@@ -107,10 +107,13 @@
             this.chkScroll = new System.Windows.Forms.CheckBox();
             this.chkPulsacion = new System.Windows.Forms.CheckBox();
             this.btPrueba = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.chkSegundoCursor = new System.Windows.Forms.CheckBox();
+            this.chkDobleClic = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // cbPuerto
@@ -823,7 +826,7 @@
             // 
             this.groupBox1.Controls.Add(this.chkInvertirBotones);
             this.groupBox1.Controls.Add(this.chkPulsador);
-            this.groupBox1.Location = new System.Drawing.Point(39, 246);
+            this.groupBox1.Location = new System.Drawing.Point(45, 370);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(153, 77);
             this.groupBox1.TabIndex = 72;
@@ -991,24 +994,45 @@
             this.btPrueba.UseVisualStyleBackColor = true;
             this.btPrueba.Click += new System.EventHandler(this.btPrueba_Click);
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.chkDobleClic);
+            this.groupBox3.Controls.Add(this.chkSegundoCursor);
+            this.groupBox3.Location = new System.Drawing.Point(45, 247);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(152, 117);
+            this.groupBox3.TabIndex = 76;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Meiga";
+            // 
             // chkSegundoCursor
             // 
             this.chkSegundoCursor.AutoSize = true;
             this.chkSegundoCursor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkSegundoCursor.Location = new System.Drawing.Point(45, 335);
+            this.chkSegundoCursor.Location = new System.Drawing.Point(6, 17);
             this.chkSegundoCursor.Name = "chkSegundoCursor";
             this.chkSegundoCursor.Size = new System.Drawing.Size(144, 24);
-            this.chkSegundoCursor.TabIndex = 75;
+            this.chkSegundoCursor.TabIndex = 76;
             this.chkSegundoCursor.Text = "Segundo Cursor";
             this.chkSegundoCursor.UseVisualStyleBackColor = true;
-            this.chkSegundoCursor.CheckedChanged += new System.EventHandler(this.chkSegundoCursor_CheckedChanged);
+            // 
+            // chkDobleClic
+            // 
+            this.chkDobleClic.AutoSize = true;
+            this.chkDobleClic.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkDobleClic.Location = new System.Drawing.Point(6, 40);
+            this.chkDobleClic.Name = "chkDobleClic";
+            this.chkDobleClic.Size = new System.Drawing.Size(99, 24);
+            this.chkDobleClic.TabIndex = 77;
+            this.chkDobleClic.Text = "Doble Clic";
+            this.chkDobleClic.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(895, 601);
-            this.Controls.Add(this.chkSegundoCursor);
+            this.ClientSize = new System.Drawing.Size(895, 496);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.btPrueba);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -1084,6 +1108,8 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1168,6 +1194,8 @@
         private System.Windows.Forms.CheckBox chkScroll;
         private System.Windows.Forms.CheckBox chkPulsacion;
         private System.Windows.Forms.Button btPrueba;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.CheckBox chkDobleClic;
         private System.Windows.Forms.CheckBox chkSegundoCursor;
     }
 }

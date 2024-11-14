@@ -37,6 +37,7 @@
             this.ClientSize = new System.Drawing.Size(120, 62);
             this.Name = "frmCursor";
             this.Text = "SegundoCursor";
+            this.TopMost = true;
             this.ResumeLayout(false);
 
         }

@@ -55,6 +55,7 @@ int  MOVIMIENTO =               1;
 int  CLIC_MEDIO =               1;
 int  CLIC_DER =                 1;
 int  CLIC_IZQ =                 1;
+int  DOBLE_CLIC =               0;
 int  ACCIONES =                 0;
 
 //***********************************************
@@ -721,6 +722,8 @@ void LeerConfiguracion()
       pos += sizeof(int);
       CLIC_MEDIO = EEPROM.readShort(pos);
       pos += sizeof(int);
+      DOBLE_CLIC = EEPROM.readShort(pos);
+      pos += sizeof(int);
       ACCIONES = EEPROM.readShort(pos);
       pos += sizeof(int);
       CFG_MODO = EEPROM.readShort(pos);
@@ -770,6 +773,8 @@ Serial.print(",");
 Serial.print(CLIC_IZQ);
 Serial.print(",");
 Serial.print(CLIC_MEDIO);
+Serial.print(",");
+Serial.print(DOBLE_CLIC);
 Serial.print(",");
 Serial.print(ACCIONES);
 Serial.print(",");

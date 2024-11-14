@@ -23,6 +23,7 @@ int   Movimiento;
 int   ClicDer;
 int   ClicIzq;
 int   ClicMedio;
+int   DobleClic;
 int   ModoOperacion;
 int   EjecAcciones;
 
@@ -77,6 +78,7 @@ void ProcesarCadena(char *Cadena)
         ClicDer = RecValor(Cadena, iPosFin + 1, ',', &iPosFin);
         ClicIzq = RecValor(Cadena, iPosFin + 1, ',', &iPosFin);
         ClicMedio = RecValor(Cadena, iPosFin + 1, ',', &iPosFin);
+        DobleClic = RecValor(Cadena, iPosFin + 1, ',', &iPosFin);
         EjecAcciones = RecValor(Cadena, iPosFin + 1, ',', &iPosFin);
         ModoOperacion = RecValor(Cadena, iPosFin + 1, ',', &iPosFin);
 
@@ -120,6 +122,8 @@ void ProcesarCadena(char *Cadena)
         EEPROM.writeShort(pos,ClicIzq);
         pos += sizeof(int);
         EEPROM.writeShort(pos,ClicMedio);
+        pos += sizeof(int);
+        EEPROM.writeShort(pos,DobleClic);
         pos += sizeof(int);
         EEPROM.writeShort(pos,EjecAcciones);
         pos += sizeof(int);
@@ -262,4 +266,5 @@ void SalidaCfg()
         Serial.println(ClicDer);
         Serial.println(ClicIzq);
         Serial.println(ClicMedio);
+        Serial.println(DobleClic);
 }

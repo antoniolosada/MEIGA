@@ -1,6 +1,6 @@
 #define LECTURA_FIN       1
 #define MAX_LON_CADENA    100
-#define COD_INI           12347
+#define COD_INI           12348
 
 extern char Cadena[MAX_LON_CADENA];
 

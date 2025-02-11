@@ -249,7 +249,7 @@ void loop()
   LOG_FIN();
 }
 
-//************************************************  END LOOP  ******************************************************************************************************************************
+//************************************************  END LOOP  *****************************c:\GOOGLE_DRIVE\GDRIVE\TONI\PROY\GITHUB\Sophie\1-bb_spi_lcd_Test.ino*************************************************************************************************
 
 void SalidaMovRaton(int MovX, int MovY)
 {
@@ -334,7 +334,10 @@ void ControlRaton()
         ClicRaton(MOUSE_LEFT);
       }
       else if (Tiempo < PULSACION_MEDIA_MS){
-        ClicRaton(MOUSE_MIDDLE);
+        if (DOBLE_CLIC)
+          ClicDoble();
+        else
+          ClicRaton(MOUSE_MIDDLE);
       }
       else {
         ClicRaton(MOUSE_RIGHT);
@@ -803,6 +806,12 @@ void MoverRaton(signed char x, signed char y)
  {
       if (bleMouse.isConnected())
         if (PULSACION) bleMouse.release(boton);
+ }
+ void ClicDoble()
+ {
+    bleMouse.click(MOUSE_LEFT);  
+    delay(100);
+    bleMouse.click(MOUSE_LEFT);  
  }
  void ClicRaton(uint8_t boton)
  {

@@ -309,6 +309,7 @@
             Name = "frmJoy";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Joy";
+            FormClosing += frmJoy_FormClosing;
             Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();

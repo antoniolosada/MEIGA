@@ -7,6 +7,7 @@ namespace Joy
 {
     public partial class frmJoy : Form
     {
+        bool Cerrar = false;
         public NotifyIcon trayIcon;
         private ContextMenuStrip trayMenu;
         public Icon[] Iconos = new Icon[5];
@@ -29,7 +30,7 @@ namespace Joy
         HiddenMouseClickDetector md = new HiddenMouseClickDetector();
         frmTransparente frm = new frmTransparente();
         Mouse Raton = new Mouse();
-        Cfg cfg = new Cfg() { IniX = 0, FinX = 1920, IniY = 0, FinY = 1080, ClicksMs=3000, CircularH = false, CircularV = false, AreasActivas = false, ClicNoPreciso = false, ClickActivo = false };
+        Cfg cfg = new Cfg() { IniX = 0, FinX = 1920, IniY = 0, FinY = 1080, ClicksMs = 3000, CircularH = false, CircularV = false, AreasActivas = false, ClicNoPreciso = false, ClickActivo = false };
 
         public frmJoy()
         {
@@ -87,8 +88,8 @@ namespace Joy
 
             frm.ShowDialog();
 
-            tbMaxX.Text = (frmJoy.MaxX-MARGEN).ToString();
-            tbMaxY.Text = (frmJoy.MaxY-MARGEN).ToString();
+            tbMaxX.Text = (frmJoy.MaxX - MARGEN).ToString();
+            tbMaxY.Text = (frmJoy.MaxY - MARGEN).ToString();
         }
 
         private void Form1_Click(object sender, EventArgs e)
@@ -104,11 +105,11 @@ namespace Joy
             Iconos[(int)TipoIcono.desactiva] = new Icon(Application.StartupPath + @"\Iconos\desactiva.ico", 40, 40);
             // Create a simple tray menu with only one item.
             trayMenu = new ContextMenuStrip();
-            trayMenu.Items.Add("Salir",null, OnExit);
+            trayMenu.Items.Add("Salir", null, OnExit);
             trayMenu.Items.Add("Activar", null, OnActivate);
             trayMenu.Items.Add("Desactivar", null, OnDisable);
             trayMenu.Items.Add("Ocultar", null, OnHide);
-            trayMenu.Items.Add("Mostrar", null,OnShow);
+            trayMenu.Items.Add("Mostrar", null, OnShow);
 
             // Create a tray icon. In this example we use a
             // standard system icon for simplicity, but you
@@ -169,11 +170,11 @@ namespace Joy
                         cfg.IniY = int.Parse(tbMinY.Text);
                         cfg.FinY = int.Parse(tbMaxY.Text);
                         cfg.CircularV = chkCircularV.Checked;
-                        cfg.CircularH = chkCircularH.Checked;   
+                        cfg.CircularH = chkCircularH.Checked;
                         cfg.ClicNoPreciso = chkClickNoPreciso.Checked;
                         cfg.ClickActivo = chkClickActivo.Checked;
                         cfg.AreasActivas = chkAreas.Checked;
-                        cfg.ClicksMs=int.Parse(tbClicMs.Text);
+                        cfg.ClicksMs = int.Parse(tbClicMs.Text);
 
                         GuardarPoligonos(poligonos, cfg, filepath);
                     }
@@ -319,7 +320,7 @@ namespace Joy
                             cfg.ClicNoPreciso = (reader.ReadLine() == "S" ? true : false);
                             cfg.CircularH = (reader.ReadLine() == "S" ? true : false);
                             cfg.CircularV = (reader.ReadLine() == "S" ? true : false);
-                            cfg.ClickActivo= (reader.ReadLine() == "S" ? true : false);
+                            cfg.ClickActivo = (reader.ReadLine() == "S" ? true : false);
                             cfg.ClicksMs = int.Parse(reader.ReadLine());
 
                             tbMinX.Text = cfg.IniX.ToString();
@@ -408,7 +409,7 @@ namespace Joy
                         if (IsPointInPolygon(pol.points, Cursor.Position))
                         {
                             if (chkClickNoPreciso.Checked)
-                                Cursor.Position = new Point(pol.clic.X- frmTransparente.DESPL_X, pol.clic.Y- frmTransparente.DESPL_Y);
+                                Cursor.Position = new Point(pol.clic.X - frmTransparente.DESPL_X, pol.clic.Y - frmTransparente.DESPL_Y);
                             Raton.sendMouseClick(Cursor.Position);
                             break;
                         }
@@ -456,6 +457,7 @@ namespace Joy
 
         private void OnExit(object sender, EventArgs e)
         {
+            Cerrar = true;
             Application.Exit();
         }
         private void OnActivate(object sender, EventArgs e)
@@ -475,5 +477,11 @@ namespace Joy
             this.Show();
         }
         #endregion trayIcon
+
+        private void frmJoy_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!Cerrar) e.Cancel = true;
+            this.Hide();
+        }
     }
 }

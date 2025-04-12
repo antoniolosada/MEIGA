@@ -51,6 +51,7 @@
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
+            chkAreaLimitada = new CheckBox();
             SuspendLayout();
             // 
             // tbMouse
@@ -280,11 +281,24 @@
             label3.TabIndex = 19;
             label3.Text = "Rango Vertical";
             // 
+            // chkAreaLimitada
+            // 
+            chkAreaLimitada.AutoSize = true;
+            chkAreaLimitada.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            chkAreaLimitada.Location = new Point(200, 177);
+            chkAreaLimitada.Margin = new Padding(2);
+            chkAreaLimitada.Name = "chkAreaLimitada";
+            chkAreaLimitada.Size = new Size(121, 25);
+            chkAreaLimitada.TabIndex = 20;
+            chkAreaLimitada.Text = "Área límitada";
+            chkAreaLimitada.UseVisualStyleBackColor = true;
+            // 
             // frmJoy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(561, 239);
+            Controls.Add(chkAreaLimitada);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
@@ -339,5 +353,6 @@
         private Label label1;
         private Label label2;
         private Label label3;
+        private CheckBox chkAreaLimitada;
     }
 }

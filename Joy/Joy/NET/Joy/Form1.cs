@@ -2,11 +2,21 @@ using static Joy.frmTransparente;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace Joy
 {
     public partial class frmJoy : Form
     {
+        // Importar la función GetKeyState desde la biblioteca user32
+        [DllImport("user32.dll")]
+        public static extern short GetKeyState(int nVirtKey);
+
+        // Definir códigos de teclas virtuales
+        const int VK_LCONTROL = 0xA2; // Control izquierda
+        const int VK_LSHIFT = 0xA0;   // Mayúsculas izquierda
+        const int VK_Q = 0x51;        // Letra Q
+
         bool Cerrar = false;
         public NotifyIcon trayIcon;
         private ContextMenuStrip trayMenu;
@@ -25,12 +35,12 @@ namespace Joy
             public int FinX;
             public int FinY;
             public int ClicksMs;
-            public bool CircularH, CircularV, AreasActivas, ClicNoPreciso, ClickActivo;
+            public bool CircularH, CircularV, AreasActivas, ClicNoPreciso, ClickActivo, AreaLimitada;
         };
         HiddenMouseClickDetector md = new HiddenMouseClickDetector();
         frmTransparente frm = new frmTransparente();
         Mouse Raton = new Mouse();
-        Cfg cfg = new Cfg() { IniX = 0, FinX = 1920, IniY = 0, FinY = 1080, ClicksMs = 3000, CircularH = false, CircularV = false, AreasActivas = false, ClicNoPreciso = false, ClickActivo = false };
+        Cfg cfg = new Cfg() { IniX = 0, FinX = 1920, IniY = 0, FinY = 1080, ClicksMs = 3000, CircularH = false, CircularV = false, AreasActivas = false, ClicNoPreciso = false, ClickActivo = false, AreaLimitada = false };
 
         public frmJoy()
         {
@@ -39,6 +49,16 @@ namespace Joy
 
         private void tmrMouse_Tick(object sender, EventArgs e)
         {
+            bool isCtrlPressed = (GetKeyState(VK_LCONTROL) & 0x8000) != 0;
+            bool isShiftPressed = (GetKeyState(VK_LSHIFT) & 0x8000) != 0;
+            bool isQPressed = (GetKeyState(VK_Q) & 0x8000) != 0;
+
+            if (isCtrlPressed && isShiftPressed && isQPressed)
+            {
+                Cerrar = true;
+                Application.Exit();
+            }
+
             if (!Activo) return;
 
             tbClick.Text = md.clic.ToString();
@@ -53,9 +73,21 @@ namespace Joy
             }
             else if ((tmrClic.Enabled == false) && (!Click))
             {
-                tmrClic.Interval = int.Parse(tbClicMs.Text);
-                tmrClic.Enabled = true;
-                tbMouse.BackColor = Color.LightSalmon;
+                if (chkAreas.Checked)
+                {
+                    foreach (Poligono pol in frm.poligonos)
+                    {
+                        if (IsPointInPolygon(pol.points, Cursor.Position))
+                        {
+                            if (chkClickNoPreciso.Checked)
+                                Cursor.Position = new Point(pol.clic.X - frmTransparente.DESPL_X, pol.clic.Y - frmTransparente.DESPL_Y);
+                            tmrClic.Interval = int.Parse(tbClicMs.Text);
+                            tmrClic.Enabled = true;
+                            tbMouse.BackColor = Color.LightSalmon;
+                            break;
+                        }
+                    }
+                }
             }
             else if (Click)
                 tbMouse.BackColor = Color.LightBlue;
@@ -78,10 +110,26 @@ namespace Joy
                 else if (p.Y <= int.Parse(tbMinY.Text))
                     Cursor.Position = new Point(Cursor.Position.X, int.Parse(tbMaxY.Text));
             }
+
+            p = Cursor.Position;
+            if (chkAreaLimitada.Checked)
+            {
+                if (p.X >= int.Parse(tbMaxX.Text))
+                    Cursor.Position = new Point(int.Parse(tbMaxX.Text), Cursor.Position.Y);
+                else if (p.X <= int.Parse(tbMinX.Text))
+                    Cursor.Position = new Point(int.Parse(tbMinX.Text), Cursor.Position.Y);
+
+                if (p.Y >= int.Parse(tbMaxY.Text))
+                    Cursor.Position = new Point(Cursor.Position.X, int.Parse(tbMaxY.Text));
+                else if (p.Y <= int.Parse(tbMinY.Text))
+                    Cursor.Position = new Point(Cursor.Position.X, int.Parse(tbMinY.Text));
+            }
         }
 
         private void cmdCfg_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("Pulse el botón izquierdo del ratón para marcar los vértices del área. El último punto será el punto de pulsación y debe marcarlo con el ratón pulsando Control.");
+
             Console.WriteLine("---------------------------");
 
             md.Run();
@@ -174,6 +222,7 @@ namespace Joy
                         cfg.ClicNoPreciso = chkClickNoPreciso.Checked;
                         cfg.ClickActivo = chkClickActivo.Checked;
                         cfg.AreasActivas = chkAreas.Checked;
+                        cfg.AreaLimitada = chkAreaLimitada.Checked;
                         cfg.ClicksMs = int.Parse(tbClicMs.Text);
 
                         GuardarPoligonos(poligonos, cfg, filepath);
@@ -266,6 +315,7 @@ namespace Joy
                     writer.WriteLine((cfg.CircularH ? "S" : "N"));
                     writer.WriteLine((cfg.CircularV ? "S" : "N"));
                     writer.WriteLine((cfg.ClickActivo ? "S" : "N"));
+                    writer.WriteLine((cfg.AreaLimitada ? "S" : "N"));
                     writer.WriteLine(cfg.ClicksMs);
                 }
             }
@@ -321,6 +371,7 @@ namespace Joy
                             cfg.CircularH = (reader.ReadLine() == "S" ? true : false);
                             cfg.CircularV = (reader.ReadLine() == "S" ? true : false);
                             cfg.ClickActivo = (reader.ReadLine() == "S" ? true : false);
+                            cfg.AreaLimitada = (reader.ReadLine() == "S" ? true : false);
                             cfg.ClicksMs = int.Parse(reader.ReadLine());
 
                             tbMinX.Text = cfg.IniX.ToString();
@@ -333,6 +384,7 @@ namespace Joy
                             chkCircularH.Checked = cfg.CircularH;
                             chkCircularV.Checked = cfg.CircularV;
                             chkClickActivo.Checked = cfg.ClickActivo;
+                            chkAreaLimitada.Checked = cfg.AreaLimitada;
                         }
 
                         if (line == "END")
@@ -378,7 +430,10 @@ namespace Joy
         private void cmdActivar_Click(object sender, EventArgs e)
         {
             if (cmdActivar.Text == "Activar")
+            {
+                MessageBox.Show("Puede salir de Joy pulsando Ctrl+Mayúsculas+Q");
                 Activar();
+            }
             else
                 Desactivar();
         }
@@ -431,6 +486,10 @@ namespace Joy
             {
                 Point current = polygon[i];
                 Point next = polygon[(i + 1) % polygon.Count];
+                current.Y -= frmTransparente.DESPL_Y;
+                current.X -= frmTransparente.DESPL_X;
+                next.Y -= frmTransparente.DESPL_Y;
+                next.X -= frmTransparente.DESPL_X;
 
                 // Comprueba si el segmento cruza la línea horizontal en la coordenada Y del punto de prueba
                 if ((current.Y > testPoint.Y) != (next.Y > testPoint.Y))

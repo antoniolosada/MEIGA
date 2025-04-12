@@ -15,6 +15,12 @@ namespace Joy
 {
     public partial class frmTransparente : Form
     {
+        [DllImport("user32.dll")]
+        private static extern short GetKeyState(int nVirtKey);
+
+        // Códigos de tecla virtual para Ctrl izquierda y derecha
+        private const int VK_LCONTROL = 0xA2;
+        private const int VK_RCONTROL = 0xA3;
         public const int DESPL_X = 0;
         public const int DESPL_Y = -20;
 
@@ -101,7 +107,7 @@ namespace Joy
                 // Dibuja el polígono final si el dibujo está completo
                 if (poligono.points.Count > 2)
                 {
-                    g.DrawPolygon(new Pen(Color.Green, 3), poligono.points.ToArray());
+                    g.DrawPolygon(new Pen(Color.Red, 3), poligono.points.ToArray());
                 }
                 g.FillEllipse(Brushes.Red, poligono.clic.X - ANCHO_CLIC, poligono.clic.Y - ANCHO_CLIC, ANCHO_CLIC, ANCHO_CLIC);
             }
@@ -116,42 +122,49 @@ namespace Joy
 
         private void tmrMouse_Tick(object sender, EventArgs e)
         {
+            // Leer el estado de ambas teclas Ctrl
+            bool ctrlIzquierdaPresionada = (GetKeyState(VK_LCONTROL) & 0x8000) != 0;
+            bool ctrlDerechaPresionada = (GetKeyState(VK_RCONTROL) & 0x8000) != 0;
+
             Point p = Cursor.Position;
             p.X += DESPL_X;
             p.Y += DESPL_Y;
+
             if (md.clic == 1)
             {
-                if (!drawingComplete)
+                if (ctrlIzquierdaPresionada)
                 {
-                    // Añade el punto donde se hizo clic
-                    poligono.points.Add(new Point(p.X, p.Y));
-                    this.Invalidate(); // Redibuja el formulario
-                }
-            }
-
-            if (md.clic == 2)
-            {
-                md.clic = 0;
-                HiddenMouseClickDetector.run = false;
-                poligono.clic = new Point(p.X, p.Y);
-                // Finaliza el dibujo al hacer clic derecho
-                poligonos.Add(poligono);
-                poligono = new Poligono();
-                poligono.points = new List<Point>();
-                this.Invalidate(); // Redibuja el formulario para mostrar el polígono completo
-                if (MessageBox.Show("Quiere pintar otra área de selección?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    HiddenMouseClickDetector.run = true;
-                    drawingComplete = false;
+                    md.clic = 0;
+                    HiddenMouseClickDetector.run = false;
+                    poligono.clic = new Point(p.X, p.Y);
+                    // Finaliza el dibujo al hacer clic derecho
+                    poligonos.Add(poligono);
+                    poligono = new Poligono();
+                    poligono.points = new List<Point>();
+                    this.Invalidate(); // Redibuja el formulario para mostrar el polígono completo
+                    if (MessageBox.Show("Quiere pintar otra área de selección?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        HiddenMouseClickDetector.run = true;
+                        drawingComplete = false;
+                    }
+                    else
+                    {
+                        drawingComplete = true;
+                        md.Stop();
+                        this.Hide();
+                    }
                 }
                 else
                 {
-                    drawingComplete = true;
-                    md.Stop();
-                    this.Hide();
+                    if (!drawingComplete)
+                    {
+                        // Añade el punto donde se hizo clic
+                        poligono.points.Add(new Point(p.X, p.Y));
+                        this.Invalidate(); // Redibuja el formulario
+                    }
                 }
+                md.clic = 0;
             }
-            md.clic = 0;
         }
 
         private void frmTransparente_Activated(object sender, EventArgs e)
